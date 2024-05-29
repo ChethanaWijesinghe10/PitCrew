@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "212460218817",
+    "project_id": "pitcrew-3e592",
+    "storage_bucket": "pitcrew-3e592.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:212460218817:android:d10a339265e45ee4dd2740",
+        "android_client_info": {
+          "package_name": "com.pitcrewapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "212460218817-1khatj7ajfo12kuc15267e32a86c614c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pitcrewapp",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "212460218817-6dudmms25hj5fco1th3goq9aeal4c78n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNBbeSAjEotRaCHU8_XXTnZI4nmvvzoTo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "212460218817-6dudmms25hj5fco1th3goq9aeal4c78n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
