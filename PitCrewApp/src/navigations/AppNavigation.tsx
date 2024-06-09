@@ -11,6 +11,7 @@ import SignUpMechanic from '../screens/SignUpMechanic';
 import TabNavigation from './TabNavigation';
 import DrawerNavigation from './DrawerNavigation';
 
+
 const Stack = createStackNavigator();
 
 const AppNavigation = () => {
