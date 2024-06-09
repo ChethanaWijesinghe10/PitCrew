@@ -41,7 +41,6 @@ const CustomDrawer = (props: any) => {
                     onPress: () => {
                         // Implement your sign-out logic here
                         if (user) {
-                            console.log('User UID:', user.uid);
                             firebase.auth().signOut();
                             BackHandler.exitApp();
 
