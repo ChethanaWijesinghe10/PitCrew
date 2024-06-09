@@ -1,21 +1,40 @@
-import { View, Text, StatusBar, Image, ScrollView } from 'react-native'
+import { View, Text, StatusBar, Image, ScrollView, BackHandler, Alert } from 'react-native'
 import React from 'react'
 import { Appbar, Drawer } from 'react-native-paper'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { useNavigation } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 
 const HomeScreen = (navigation: any) => {
 
 
+  useFocusEffect(
+    React.useCallback(() => {
+      const handleBackPress = () => {
+        Alert.alert('Exit App', 'Are you sure you want to exit?', [
+          {
+            text: 'Cancel',
+            onPress: () => null,
+            style: 'cancel'
+          },
+          {
+            text: 'Exit',
+            onPress: () => BackHandler.exitApp(),
+          }
+        ]);
+        return true;
+      };
+  
+      BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+  
+      return () => {
+        BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
+      };
+    }, []),
+  );
+  
   return (
     <SafeAreaProvider>
       <View>
-
-        {/* <Appbar.Header style={{ backgroundColor: '#11046E' }}>
-          <Appbar.Action icon={'menu'} color='white' onPress={navigation.openDrawer()}/>
-          <Appbar.Content title='PitCrew' color='white' style={{ alignItems: 'center', }} />
-          <Appbar.Action icon={'cart'} color='white' />
-        </Appbar.Header> */}
 
         <StatusBar backgroundColor={'#291D7D'} />
 

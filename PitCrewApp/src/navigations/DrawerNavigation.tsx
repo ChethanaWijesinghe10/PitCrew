@@ -19,7 +19,7 @@ const DrawerNavigation = (props: any) => {
         headerTintColor: 'white', 
         headerStyle: {backgroundColor: '#11046E'}
       }} 
-      drawerContent={(props) => <CustomDrawer {...props} />
+      drawerContent={(props) => <CustomDrawer {...props} navigation={props.navigation} />
       }>
         <Drawer.Screen name="Home" component={TabNavigation} 
         options={{ 
@@ -34,5 +34,6 @@ const DrawerNavigation = (props: any) => {
     </NavigationContainer>
   )
 }
+
 
 export default DrawerNavigation
