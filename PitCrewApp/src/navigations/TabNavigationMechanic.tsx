@@ -4,22 +4,22 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { Icon } from '@rneui/base';
-import SparePartsNavigator from './SparePartsNavigator';
+import SparePartsNavigatorMec from './SparePartsNavigatorMec';
 
 
 const Tab = createBottomTabNavigator();
 
-const TabNavigation = () => {
+const TabNavigationMechanic = () => {
     return (
         <NavigationContainer independent={true}>
-            <Tab.Navigator screenOptions={{headerShown: false, tabBarShowLabel: false, tabBarStyle:{height: 70} }}  >
+            <Tab.Navigator  screenOptions={{headerShown: false, tabBarShowLabel: false, tabBarStyle:{height: 70}  }}   >
                 <Tab.Screen name="Home" component={HomeScreen} options={{tabBarIcon: ({focused}) => (
                     <View style={{alignItems: 'center', justifyContent: 'center'}} >
                         <Icon name='home' type='material' size={35} color={focused? '#ED1C24' : '#707477'} />
                         <Text style={{color: focused? '#ED1C24' : '#707477', fontFamily: 'Poppins-Medium'}}>Home</Text>
                     </View>
                 )}}/>
-                <Tab.Screen name="Spare Parts" component={SparePartsNavigator} options={{tabBarIcon: ({focused}) => (
+                <Tab.Screen name="Spare Parts" component={SparePartsNavigatorMec} options={{tabBarIcon: ({focused}) => (
                     <View style={{alignItems: 'center', justifyContent: 'center'}} >
                         <Icon name='settings' type='material' size={32} style={{marginTop: '1%'}} color={focused? '#ED1C24' : '#707477'} />
                         <Text style={{color: focused? '#ED1C24' : '#707477', fontFamily: 'Poppins-Medium', marginTop: 3}}>Parts</Text>
@@ -48,4 +48,4 @@ const TabNavigation = () => {
     )
 }
 
-export default TabNavigation
+export default TabNavigationMechanic
