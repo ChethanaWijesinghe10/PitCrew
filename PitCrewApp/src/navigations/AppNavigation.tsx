@@ -8,8 +8,8 @@ import SigninScreen from '../screens/SigninScreen';
 import SignupWelcomeScreen from '../screens/SignupWelcomeScreen';
 import SignUpUser from '../screens/SignUpUser';
 import SignUpMechanic from '../screens/SignUpMechanic';
-import TabNavigation from './TabNavigation';
 import DrawerNavigation from './DrawerNavigation';
+import DrawerNavigationMechanic from './DrawerNavigationMechanic';
 
 
 const Stack = createStackNavigator();
@@ -23,9 +23,11 @@ const AppNavigation = () => {
                 <Stack.Screen name="SignIn" component={SigninScreen} />
                 <Stack.Screen name="SignUpWelcome" component={SignupWelcomeScreen} />
                 <Stack.Screen name="SignUpUser" component={SignUpUser} />
-                <Stack.Screen name="SignUpMechanicS1" component={SignUpMechanic} />
-                <Stack.Screen name="Home" component={DrawerNavigation} />
-                <Stack.Screen name="Drawer" component={DrawerNavigation} />
+                <Stack.Screen name="SignUpMec" component={SignUpMechanic} />
+                <Stack.Screen name="HomeUser" component={DrawerNavigation} />
+                <Stack.Screen name="HomeMec" component={DrawerNavigationMechanic} />
+                {/* <Stack.Screen name="Drawer" component={DrawerNavigation} />
+                <Stack.Screen name="DrawerMec" component={DrawerNavigationMechanic} /> */}
             </Stack.Navigator>
         </NavigationContainer>
     )
