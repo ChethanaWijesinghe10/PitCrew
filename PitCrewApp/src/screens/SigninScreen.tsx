@@ -7,9 +7,9 @@ import 'firebase/compat/auth';
 import { useNavigation } from '@react-navigation/native'
 import { GoogleSignin } from '@react-native-google-signin/google-signin'; 
 import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import { initializeApp } from 'firebase/app'
+import { useUserType } from '../components/UserTypeContext'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const SigninScreen = (props: any) => {
@@ -126,10 +126,16 @@ function SignInSection() {
 
     const nav: any = useNavigation();
 
+    const { userType,setUserType } = useUserType(); 
+
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
     const [isLogging, setIsLogging] = useState(false);
+
+    useEffect(() => {
+        console.log('User Type:', userType); // Log userType whenever it changes
+    }, [userType]);
 
     function gotoHome() {
         setIsLogging(true);
@@ -153,13 +159,19 @@ function SignInSection() {
                     if (vehicleOwnerSnapshot.exists) {
                         setIsLogging(false);
                         console.log('Navigate to User Home');
-                        AsyncStorage.setItem('email', email.toLowerCase());
-                        nav.navigate('Home');
+                        setUserType('VehicleOwner');
+                        AsyncStorage.setItem('USERID', uid);
+                        console.log(userType);
+                        nav.navigate('HomeUser');
+
                         return;
                     } else if (mechanicSnapshot.exists) {
                         setIsLogging(false);
                         console.log('Navigate to Mechanic Home');
-                        AsyncStorage.setItem('email', email.toLowerCase());
+                        setUserType('Mechanic'); 
+                        AsyncStorage.setItem('USERID', uid);
+                        console.log(userType);
+                        nav.navigate('HomeMec');
                         return;
                     } else {
                         console.error('User not found in either collection');
