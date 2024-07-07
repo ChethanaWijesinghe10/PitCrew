@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
 import { useIsFocused } from '@react-navigation/native';
-import RazorpayCheckout from 'react-native-razorpay';
-import { Icon } from '@rneui/base';
+import { useStripe, CardField, initStripe } from '@stripe/stripe-react-native';
+import { Appbar } from 'react-native-paper';
 
 interface CartItem {
   id: string;
@@ -22,15 +22,18 @@ const Checkout: React.FC<{ navigation: any }> = ({ navigation }) => {
   const [cartList, setCartList] = useState<CartItem[]>([]);
   const isFocused = useIsFocused();
   const [selectedAddress, setSelectedAddress] = useState<string>('No Selected Address');
+  const stripe = useStripe();
 
   useEffect(() => {
+    initStripe({ publishableKey: 'pk_test_51PJZWwG5nxL6dlBMLgFfy3VqsNNLUmfp31gyDKy3RqpKFfV5yzhcJpwjuoENu0ImWtkFbCyEOEZ8semA6hA3pyJP00bTGnIfOA' });
     getCartItems();
     getAddressList();
   }, [isFocused]);
 
+  // Function to get cart items from Firestore
   const getCartItems = async () => {
     try {
-      const userId = await AsyncStorage.getItem('USERID') ?? ''; // Handle null
+      const userId = await AsyncStorage.getItem('USERID') ?? '';
       const userDoc = await firestore().collection('VehicleOwners').doc(userId).get();
       const userData = userDoc.data();
       if (userData && userData.cart) {
@@ -41,14 +44,15 @@ const Checkout: React.FC<{ navigation: any }> = ({ navigation }) => {
     }
   };
 
+  // Function to get user's address list from Firestore
   const getAddressList = async () => {
     try {
-      const userId = await AsyncStorage.getItem('USERID') ?? ''; // Handle null
-      const addressId = await AsyncStorage.getItem('ADDRESS') ?? ''; // Handle null
+      const userId = await AsyncStorage.getItem('USERID') ?? '';
+      const addressId = await AsyncStorage.getItem('ADDRESS') ?? '';
       const userDoc = await firestore().collection('VehicleOwners').doc(userId).get();
       const userData = userDoc.data();
       if (userData && userData.address) {
-        const address = userData.address.find((item: { addressId: string; }) => item.addressId === addressId);
+        const address = userData.address.find((item: { addressId: string }) => item.addressId === addressId);
         if (address) {
           setSelectedAddress(`${address.street}, ${address.city}, ${address.pincode}, ${address.mobile}`);
         }
@@ -58,6 +62,7 @@ const Checkout: React.FC<{ navigation: any }> = ({ navigation }) => {
     }
   };
 
+  // Function to calculate total price of items in cart
   const getTotal = () => {
     return cartList.reduce((total, item) => {
       const itemPrice = parseFloat(item.data.discountPrice.toString());
@@ -70,135 +75,156 @@ const Checkout: React.FC<{ navigation: any }> = ({ navigation }) => {
     }, 0);
   };
 
-  const payNow = async () => {
+  // Function to create payment intent
+  const createPaymentIntent = async () => {
     try {
-      const email = await AsyncStorage.getItem('EMAIL') ?? ''; // Handle null
-      const name = await AsyncStorage.getItem('NAME') ?? ''; // Handle null
-      const mobile = await AsyncStorage.getItem('MOBILE') ?? ''; // Handle null
-      const userId = await AsyncStorage.getItem('USERID') ?? ''; // Handle null
-      const options = {
-        description: 'Credits towards consultation',
-        image: require('../../../../assets/img/logo.png'), // Correct image path
-        currency: 'INR',
-        key: 'rzp_test_2VYHup8J177yIx',
-        amount: getTotal() * 100,
-        name: 'Food App',
-        order_id: '', // Replace this with an order_id created using Orders API.
-        prefill: {
-          email: email,
-          contact: mobile,
-          name: name,
+      const totalAmount = getTotal() * 100; // Convert to cents
+      const response = await fetch('http://localhost:3000/create-payment-intent', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-        theme: { color: '#EC9912' },
-      };
-      RazorpayCheckout.open(options)
-        .then((data: { razorpay_payment_id: any; }) => {
-          navigation.navigate('OrderStatus', {
-            status: 'success',
-            paymentId: data.razorpay_payment_id,
-            cartList: cartList,
-            total: getTotal(),
-            address: selectedAddress,
-            userId: userId,
-            userName: name,
-            userEmail: email,
-            userMobile: mobile,
-          });
-        })
-        .catch((error: any) => {
-          console.error('Payment error:', error);
-          navigation.navigate('OrderStatus', {
-            status: 'failed',
-          });
+        body: JSON.stringify({ amount: totalAmount }),
+      });
+      const { clientSecret } = await response.json();
+      return clientSecret;
+    } catch (error) {
+      console.error('Error creating payment intent:', error);
+    }
+  };
+
+  // Function to handle payment process
+  const handlePayment = async () => {
+    try {
+      const clientSecret = await createPaymentIntent();
+      const { error, paymentIntent } = await stripe.confirmPayment(clientSecret);
+
+      if (error) {
+        console.error('Payment failed', error);
+        Alert.alert('Payment failed', error.message);
+        navigation.navigate('OrderStatus', { status: 'failed' });
+      } else if (paymentIntent) {
+        Alert.alert('Payment successful', 'Your payment was successful');
+        navigation.navigate('OrderStatus', {
+          status: 'success',
+          paymentId: paymentIntent.id,
+          cartList: cartList,
+          total: getTotal(),
+          address: selectedAddress,
         });
+      }
     } catch (error) {
       console.error('Error processing payment:', error);
+      Alert.alert('Payment failed', 'There was an error processing your payment');
     }
   };
 
   return (
     <View style={{ flex: 1 }}>
-      <FlatList
-        contentContainerStyle={styles.container}
-        data={cartList}
-        renderItem={({ item, index }) => {
-          const qty = item.qty !== undefined ? item.qty : 1;
-          return (
-            <View style={styles.itemView}>
-              <Image
-                source={{ uri: item.data.imageUrl }}
-                style={styles.itemImage}
-              />
-              <View style={styles.nameView}>
-                <Text style={styles.nameText}>{item.data.name}</Text>
-                <Text style={styles.descText}>{item.data.description}</Text>
-                <View style={styles.priceView}>
-                  <Text style={styles.priceText}>
-                    {'$' + item.data.discountPrice}
-                  </Text>
-                  <Text style={styles.discountText}>
-                    {'$' + item.data.price}
-                  </Text>
+      <ScrollView contentContainerStyle={styles.container}>
+        <Appbar.Header style={{ backgroundColor: '#291D7D' }}>
+          <Appbar.BackAction color='white' onPress={() => navigation.navigate('ProductList')} />
+          <Appbar.Content title='Checkout' color='white' style={{ alignItems: 'center' }} />
+          <Appbar.Action icon={'cart'} color='#291D7D' />
+        </Appbar.Header>
+
+        <FlatList
+          style={{ flexGrow: 1 }}
+          data={cartList}
+          renderItem={({ item, index }) => {
+            const qty = item.qty !== undefined ? item.qty : 1;
+            return (
+              <View style={styles.itemView}>
+                <Image
+                  source={{ uri: item.data.imageUrl }}
+                  style={styles.itemImage}
+                />
+                <View style={styles.nameView}>
+                  <Text style={styles.nameText}>{item.data.name}</Text>
+                  <Text style={styles.descText}>{item.data.description}</Text>
+                  <View style={styles.priceView}>
+                    <Text style={styles.priceText}>
+                      {'$' + item.data.discountPrice}
+                    </Text>
+                    <Text style={styles.discountText}>
+                      {'$' + item.data.price}
+                    </Text>
+                  </View>
                 </View>
+                <Text style={styles.nameText}>{'Qty : ' + qty}</Text>
               </View>
-              <Text style={styles.nameText}>{'Qty : ' + qty}</Text>
-            </View>
-          );
+            );
+          }}
+          keyExtractor={(item, index) => index.toString()}
+        />
+
+        <View style={styles.totalView}>
+          <Text style={styles.nameText}>Total</Text>
+          <Text style={styles.nameText}>{'$' + getTotal()}</Text>
+        </View>
+
+        <View style={styles.totalView}>
+          <Text style={styles.nameText}>Selected Address</Text>
+          <Text
+            style={styles.editAddress}
+            onPress={() => {
+              navigation.navigate('Address');
+            }}>
+            Change Address
+          </Text>
+        </View>
+
+        <Text
+          style={{
+            margin: 15,
+            width: '100%',
+            fontSize: 16,
+            color: '#000',
+            fontWeight: '600',
+          }}>
+          {selectedAddress}
+        </Text>
+
+      </ScrollView>
+
+      <CardField
+        postalCodeEnabled={true}
+        placeholders={{
+          number: '4242 4242 4242 4242',
         }}
-        keyExtractor={(item, index) => index.toString()}
-        ListHeaderComponent={
-          <View style={styles.header}>
-            <Icon type='ionicons' name='arrow-back' color={'white'} onPress={() => navigation.navigate('Cart')} />
-            <Text style={{ flex: 1, textAlign: 'center', color: 'white', fontSize: 20, fontWeight: '500' }}>Checkout</Text>
-          </View>
-        }
-        ListFooterComponent={
-          <View>
-            <View style={styles.totalView}>
-              <Text style={styles.nameText}>Total</Text>
-              <Text style={styles.nameText}>{'$' + getTotal()}</Text>
-            </View>
-            <View style={styles.totalView}>
-              <Text style={styles.nameText}>Selected Address</Text>
-              <Text
-                style={styles.editAddress}
-                onPress={() => {
-                  navigation.navigate('Address');
-                }}>
-                Change Address
-              </Text>
-            </View>
-            <Text
-              style={{
-                margin: 15,
-                width: '100%',
-                fontSize: 16,
-                color: '#000',
-                fontWeight: '600',
-              }}>
-              {selectedAddress}
-            </Text>
-            <TouchableOpacity
-              disabled={selectedAddress === 'No Selected Address'}
-              style={[
-                styles.checkoutBtn,
-                {
-                  backgroundColor:
-                    selectedAddress === 'No Selected Address' ? '#DADADA' : 'green',
-                },
-              ]}
-              onPress={() => {
-                if (selectedAddress !== 'No Selected Address') {
-                  payNow();
-                }
-              }}>
-              <Text style={{ color: '#fff', fontSize: 18, fontWeight: '600' }}>
-                Pay Now {'$' + getTotal()}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        }
+        cardStyle={{
+          backgroundColor: '#FFFFFF',
+          textColor: '#000000',
+        }}
+        style={styles.cardField}
+        onCardChange={(cardDetails: any) => {
+          console.log('cardDetails', cardDetails);
+        }}
+        onFocus={(focusedField: any) => {
+          console.log('focusField', focusedField);
+        }}
       />
+
+      <View>
+        <TouchableOpacity
+          disabled={selectedAddress === 'No Selected Address'}
+          style={[
+            styles.checkoutBtn,
+            {
+              backgroundColor:
+                selectedAddress === 'No Selected Address' ? '#DADADA' : 'green',
+            },
+          ]}
+          onPress={() => {
+            if (selectedAddress !== 'No Selected Address') {
+              handlePayment();
+            }
+          }}>
+          <Text style={{ color: '#fff', fontSize: 18, fontWeight: '600' }}>
+            Pay Now {'$' + getTotal()}
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -209,89 +235,13 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
   },
-  itemView: {
-    flexDirection: 'row',
-    width: '90%',
-    alignSelf: 'center',
-    backgroundColor: '#fff',
-    elevation: 4,
-    marginTop: 10,
-    borderRadius: 10,
-    marginBottom: 10,
-    alignItems: 'center',
-  },
-  itemImage: {
-    width: 90,
-    height: 90,
-    borderRadius: 10,
-    margin: 5,
-  },
-  nameView: {
-    width: '50%',
-    marginHorizontal: 5,
-    marginVertical: 5,
-    paddingTop: 0,
-  },
-  priceView: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 5
-  },
-  nameText: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: 'black',
-  },
-  descText: {
-    fontSize: 14,
-    fontWeight: '600',
-    width: '100%',
-  },
-  priceText: {
-    fontSize: 17,
-    color: 'red',
-    fontWeight: '700',
-  },
-  discountText: {
-    fontSize: 17,
-    fontWeight: '600',
-    textDecorationLine: 'line-through',
-    marginLeft: 20,
-  },
-  totalView: {
-    flexDirection: 'row',
-    width: '100%',
-    justifyContent: 'space-between',
-    paddingLeft: 20,
-    height: 50,
-    borderTopWidth: 0.3,
-    paddingRight: 20,
-    marginTop: 20,
-    alignItems: 'center',
-    borderTopColor: '#8e8e8e',
-  },
-  editAddress: {
-    color: '#2F62D1',
-    fontSize: 16,
-    fontWeight: '600',
-    textDecorationLine: 'underline',
-  },
-  checkoutBtn: {
-    width: '90%',
-    height: 50,
-    borderRadius: 10,
-    backgroundColor: 'green',
-    marginBottom: 20,
-    alignSelf: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#291D7D',
     height: 60,
-    paddingHorizontal: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
   },
   title: {
     fontSize: 20,
@@ -300,12 +250,92 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     flex: 1,
   },
-  arrowIcon: {
-    marginRight: 20,
-  },
   icon: {
     width: 24,
     height: 24,
     tintColor: 'white',
+  },
+  itemView: {
+    flexDirection: 'row',
+    width: '90%',
+    alignSelf: 'center',
+    backgroundColor: '#fff',
+    elevation: 4,
+    marginTop: 10,
+    borderRadius: 10,
+    height: 230,
+    marginBottom: 10,
+    alignItems: 'center',
+  },
+  itemImage: {
+    width: 90,
+    height: 90,
+    borderRadius: 10,
+    marginLeft: 10,
+    marginTop: 20,
+    marginBottom: 20,
+    resizeMode: 'cover',
+  },
+  nameView: {
+    flex: 1,
+    padding: 10,
+    justifyContent: 'center',
+  },
+  nameText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  descText: {
+    fontSize: 14,
+    color: '#666',
+    marginTop: 5,
+  },
+  priceView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 5,
+  },
+  priceText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  discountText: {
+    fontSize: 14,
+    textDecorationLine: 'line-through',
+    color: '#666',
+    marginLeft: 10,
+  },
+  totalView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '90%',
+    alignSelf: 'center',
+    backgroundColor: '#fff',
+    elevation: 4,
+    marginTop: 10,
+    marginBottom: 10,
+    borderRadius: 10,
+    padding: 15,
+  },
+  editAddress: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: 'red',
+  },
+  cardField: {
+    width: '95%',
+    height: 50,
+    marginVertical: 30,
+    marginHorizontal: 10,
+  },
+  checkoutBtn: {
+    width: '90%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 50,
+    alignSelf: 'center',
+    borderRadius: 10,
+    marginBottom: 20,
   },
 });
