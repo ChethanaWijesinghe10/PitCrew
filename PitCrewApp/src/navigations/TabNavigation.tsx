@@ -4,7 +4,11 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { Icon } from '@rneui/base';
+
+import WorkshopList from '../screens/WorkshopList';
+
 import SparePartsNavigator from './SparePartsNavigator';
+
 
 
 const Tab = createBottomTabNavigator();
