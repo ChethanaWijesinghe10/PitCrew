@@ -1,6 +1,7 @@
 import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, FlatList, Image } from 'react-native';
 import React, { useState } from 'react';
 import { Icon } from '@rneui/base';
+import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
 
 // Import local images
 import enginePreparationImage from '../../assets/img/WorkShops/ws1.png';
@@ -8,8 +9,6 @@ import transmissionRepairImage from '../../assets/img/WorkShops/ws1.png';
 import brakeSuspensionImage from '../../assets/img/WorkShops/ws1.png';
 import tireWheelImage from '../../assets/img/WorkShops/ws1.png';
 import paintBodyImage from '../../assets/img/WorkShops/ws1.png';
-import TabNavigation from '../navigations/TabNavigation';
-import WorkshopNavigation from '../navigations/WorkshopNavigation';
 
 const allWorkshops = [
   {
@@ -17,77 +16,89 @@ const allWorkshops = [
     name: 'Engine Preparation Workshop',
     location: '123 Main St, Matara',
     service: 'Engine preparing',
-    image: enginePreparationImage
+    image: enginePreparationImage,
+    description: 'Specializes in preparing and overhauling engines to ensure optimal performance for various vehicle types.'
   },
   {
     id: '2',
     name: 'Transmission Repair Shop',
     location: '456 Elm St, Galle',
     service: 'Transmission repair',
-    image: transmissionRepairImage
+    image: transmissionRepairImage,
+    description: 'Offers expert services in repairing and maintaining transmission systems for smooth and efficient vehicle operation.'
   },
   {
     id: '3',
     name: 'Brake and Suspension Center',
     location: '789 Oak St, Colombo',
     service: 'Brake and suspension service',
-    image: brakeSuspensionImage
+    image: brakeSuspensionImage,
+    description: 'Provides specialized services in brake and suspension systems to ensure safety and comfort on the road.'
   },
   {
     id: '4',
     name: 'Tire and Wheel Shop',
-    location: '101 Pine St, Manner',
+    location: '101 Pine St, Mannar',
     service: 'Tire and wheel service',
-    image: tireWheelImage
+    image: tireWheelImage,
+    description: 'Expert in tire and wheel services, offering everything from tire replacements to wheel alignment and balancing.'
   },
   {
     id: '5',
     name: 'Paint and Body Workshop',
-    location: '202 Maple St,Jaffna',
+    location: '202 Maple St, Jaffna',
     service: 'Paint and body work',
-    image: paintBodyImage
+    image: paintBodyImage,
+    description: 'Specializes in vehicle painting and bodywork, providing top-quality finishes and repairs for all types of vehicles.'
   },
   {
     id: '6',
     name: 'General Auto Repair',
     location: '303 Cedar St, Gampaha',
     service: 'General repair',
-    image: paintBodyImage
+    image: paintBodyImage,
+    description: 'A comprehensive auto repair shop offering a wide range of general repair services for vehicles of all makes and models.'
   },
   {
     id: '7',
     name: 'Exhaust and Muffler Shop',
-    location: '404 Birch St, Kurunagala',
+    location: '404 Birch St, Kurunegala',
     service: 'Exhaust repair',
-    image: paintBodyImage
+    image: paintBodyImage,
+    description: 'Specializes in exhaust and muffler repairs, ensuring your vehicle runs smoothly and efficiently with reduced emissions.'
   },
   {
     id: '8',
     name: 'Electrical Systems Workshop',
     location: '505 Redwood St, Kandy',
     service: 'Electrical systems',
-    image: paintBodyImage
+    image: paintBodyImage,
+    description: 'Expert in diagnosing and repairing electrical systems, from wiring issues to battery replacements and everything in between.'
   },
   {
     id: '9',
     name: 'Radiator Repair Shop',
     location: '606 Spruce St, Badulla',
     service: 'Radiator repair',
-    image: paintBodyImage
+    image: paintBodyImage,
+    description: 'Provides specialized radiator repair services to keep your vehicle’s cooling system in top condition.'
   },
   {
     id: '10',
     name: 'Glass Repair and Replacement',
     location: '707 Fir St, Balangoda',
     service: 'Glass repair',
-    image: paintBodyImage
+    image: paintBodyImage,
+    description: 'Offers glass repair and replacement services, ensuring clear visibility and safety with high-quality materials.'
   }
 ];
+
 
 const WorkshopList = () => {
   const [searchText, setSearchText] = useState('');
   const [filteredWorkshops, setFilteredWorkshops] = useState(allWorkshops.slice(0, 5));
   const [menuVisible, setMenuVisible] = useState(false);
+  const navigation = useNavigation(); // Initialize useNavigation
 
   const handleSearch = (text: string) => {
     setSearchText(text);
@@ -106,8 +117,10 @@ const WorkshopList = () => {
     setFilteredWorkshops(updatedWorkshops);
   };
 
-  const handleAddToCart = (workshop: any) => {
-    // Implement the logic to add the workshop to another page/cart
+ 
+
+  const handleWorkshopPress = (workshop: any) => {
+    navigation.navigate('WorkshopDetails', { workshop });
   };
 
   return (
@@ -117,9 +130,7 @@ const WorkshopList = () => {
           <Icon style={styles.menuIcon} name="menu" size={35} color="white" />
         </TouchableOpacity>
         <Text style={styles.headerText}>PitCrew</Text>
-        <TouchableOpacity>
-          <Icon style={styles.cartIcon} name="add-shopping-cart" size={30} color="white" />
-        </TouchableOpacity>
+       
       </View>
 
       {menuVisible && (
@@ -170,7 +181,7 @@ const WorkshopList = () => {
         data={filteredWorkshops}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View style={styles.workshopItem}>
+          <TouchableOpacity style={styles.workshopItem} onPress={() => handleWorkshopPress(item)}>
             <Image source={item.image} style={styles.workshopImage} />
             <View style={styles.workshopInfo}>
               <Text style={styles.workshopName}>{item.name}</Text>
@@ -178,23 +189,19 @@ const WorkshopList = () => {
               <Text style={styles.workshopService}>{item.service}</Text>
             </View>
             <View style={styles.iconContainer}>
-              <TouchableOpacity >
+              <TouchableOpacity onPress={() => handleDelete(item.id)}>
                 <Icon name="delete" size={30} color="red" />
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleAddToCart(item)}>
-                <Icon name="add-shopping-cart" size={30} color="green" />
-              </TouchableOpacity>
+             
             </View>
-          </View>
+          </TouchableOpacity>
         )}
       />
-      
-
     </View>
-  )
-}
+  );
+};
 
-export default WorkshopList
+export default WorkshopList;
 
 const styles = StyleSheet.create({
   container: {
@@ -207,7 +214,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#11046E',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
     paddingHorizontal: 20,
   },
   menuIcon: {
@@ -219,6 +226,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginTop: 10,
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
   cartIcon: {
     marginTop: 10,
@@ -267,17 +276,20 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 5,
     marginHorizontal: 20,
-    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
   },
   workshopImage: {
-    width: 70,
-    height: 70,
+    width: 80,
+    height: 80,
     borderRadius: 10,
   },
   workshopInfo: {
     flex: 1,
     marginLeft: 10,
-    justifyContent: 'center',
   },
   workshopName: {
     fontSize: 18,
@@ -286,16 +298,13 @@ const styles = StyleSheet.create({
   workshopLocation: {
     fontSize: 14,
     color: 'gray',
-    marginTop: 5,
   },
   workshopService: {
     fontSize: 14,
-    color: 'gray',
-    marginTop: 5,
+    color: 'black',
   },
   iconContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: 70,
+    alignItems: 'center',
   },
 });

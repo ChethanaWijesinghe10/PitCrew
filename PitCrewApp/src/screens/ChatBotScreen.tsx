@@ -4,7 +4,7 @@ import { GiftedChat, IMessage } from 'react-native-gifted-chat';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 
-const ChatScreen: React.FC = () => {
+const ChatBotScreen: React.FC = () => {
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -236,4 +236,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ChatScreen;
+export default ChatBotScreen;
