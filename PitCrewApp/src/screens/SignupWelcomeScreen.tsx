@@ -23,7 +23,7 @@ const SignupWelcomeScreen = (props: any) => {
     if (selectedValue === 'VOwner') {
       stack.navigate('SignUpUser');
     } else if (selectedValue === 'Mechanic') {
-      stack.navigate('SignUpMechanicS1');
+      stack.navigate('SignUpMec');
     }
   }
 

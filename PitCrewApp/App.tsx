@@ -4,6 +4,7 @@ import 'react-native-gesture-handler';
 import AppNavigation from './src/navigations/AppNavigation';
 import { sty } from './src/styles/Styles';
 import { NavigationContainer } from '@react-navigation/native';
+
 import DrawerNavigation from './src/navigations/DrawerNavigation';
 import WorkshopProfile from './src/screens/WorkshopProfile';
 
@@ -16,14 +17,21 @@ import WorkshopList from './src/screens/WorkshopList';
 import WorkshopListNavigation from './src/navigations/WorkshopListNavigation';
 import ChatBotScreen from './src/screens/ChatBotScreen';
 
+import { UserTypeProvider } from './src/components/UserTypeContext';
+import FlashMessage from 'react-native-flash-message';
+
 
 function App(): React.JSX.Element {
   return (
-    // <View style={sty.AppContainer}>
-    //   <NavigationContainer>
-    //     <AppNavigation />
-    //   </NavigationContainer>
-    // </View>
+
+    <View style={sty.AppContainer}>
+      <NavigationContainer>
+        <UserTypeProvider>
+          <AppNavigation />
+        </UserTypeProvider>
+      </NavigationContainer>
+      <FlashMessage position="bottom" />
+    </View>
 
     // <View style={sty.AppContainer}>
     //   <NavigationContainer>

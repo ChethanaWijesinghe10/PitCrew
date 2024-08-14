@@ -5,12 +5,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import TabNavigation from '../navigations/TabNavigation';
 import CustomDrawer from './CustomDrawer';
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import FuelNavigator from './FuelNavigator';
-import { Icon } from '@rneui/base';
+import TabNavigationMechanic from './TabNavigationMechanic';
 
 const Drawer = createDrawerNavigator();
 
-const DrawerNavigation = (props: any) => {
+const DrawerNavigationMechanic = (props: any) => {
 
   return (
     <NavigationContainer independent={true}>
@@ -23,7 +22,7 @@ const DrawerNavigation = (props: any) => {
       }} 
       drawerContent={(props) => <CustomDrawer {...props} navigation={props.navigation} />
       }>
-        <Drawer.Screen name="Home" component={TabNavigation} 
+        <Drawer.Screen name="Home" component={TabNavigationMechanic} 
         options={{ 
           headerTitle: 'PitCrew',
           headerTitleAlign:'center', 
@@ -32,19 +31,10 @@ const DrawerNavigation = (props: any) => {
           drawerIcon: ({color}) => {
           return <Ionicons name="home-outline" size={22} color={color} style={{marginLeft: 5}} />;
         }, }}/>
-        <Drawer.Screen name="Maintenance Records" component={FuelNavigator} 
-        options={{ 
-          headerTitle: 'Maintenance Records',
-          headerTitleAlign:'center', 
-          headerTitleStyle: {fontSize: 23 }, 
-          drawerItemStyle: {marginTop: 20}, 
-          drawerIcon: ({color}) => {
-          return <Icon name="gas-station" type='material-community' size={22} color={color} style={{marginLeft: 5}} />;
-        }, }}/>
       </Drawer.Navigator>
     </NavigationContainer>
   )
 }
 
 
-export default DrawerNavigation
+export default DrawerNavigationMechanic
