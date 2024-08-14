@@ -185,7 +185,7 @@ const Checkout: React.FC<{ navigation: any }> = ({ navigation }) => {
           {selectedAddress}
         </Text>
 
-      </ScrollView>
+      
 
       <CardField
         postalCodeEnabled={true}
@@ -225,6 +225,7 @@ const Checkout: React.FC<{ navigation: any }> = ({ navigation }) => {
           </Text>
         </TouchableOpacity>
       </View>
+      </ScrollView>
     </View>
   );
 };
