@@ -38,17 +38,17 @@ function App(): React.JSX.Element {
     // </View>
     // <WorkshopList/>
 
-    <View style={sty.AppContainer}>
-      <NavigationContainer>
-        <WorkshopListNavigation />
-      </NavigationContainer>
-    </View>
+    // <View style={sty.AppContainer}>
+    //   <NavigationContainer>
+    //     <WorkshopListNavigation />
+    //   </NavigationContainer>
+    // </View>
 
-//<View style={sty.AppContainer}>
-//<NavigationContainer>
-  //<ChatBotScreen />
-//</NavigationContainer>
-//</View>
+<View style={sty.AppContainer}>
+<NavigationContainer>
+<ChatBotScreen />
+</NavigationContainer>
+</View>
 
   
 
