@@ -1,15 +1,13 @@
 // WorkshopProfile.tsx
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image, Alert } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import Icon from 'react-native-vector-icons/Ionicons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { firebase } from '../../firebase/firebaseConfig';
+import { firebase } from '../../../firebase/firebaseConfig';
 import { useNavigation } from '@react-navigation/native';
-import WorkshopNavigation from '../navigations/WorkshopNavigation';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const WorkshopProfile1: React.FC = () => {
+const WorkshopProfile: React.FC = () => {
   const navigation = useNavigation();
 
 
@@ -24,22 +22,27 @@ const WorkshopProfile1: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      const userId = await AsyncStorage.getItem('USERID');
+            console.log(userId);
       try {
-        const doc = await firebase.firestore().collection('Workshops').doc('Malshan').get();
-        if (doc.exists) {
-          const data = doc.data();
+        if (userId) {
+          const user = await firebase.firestore().collection('Mechanics').doc(userId).get();
+        
+        if (user.exists) {
+          const data = user.data();
           if (data) {
-            setWorkshopName(data.workshopName || '');
+            setWorkshopName(data.worshopName || '');
             setOwnerName(data.ownerName || '');
             setAddress(data.address || '');
             setWorkingCity(data.workingCity || '');
-            setSpecialistArea(data.specialistArea || '');
+            setSpecialistArea(data.specificArea || '');
             setEmail(data.email || '');
-            setMobile(data.mobile || '');
+            setMobile(data.contactNo || '');
           }
         } else {
           console.log('No such document!');
         }
+      }
       } catch (error) {
         console.error('Error fetching document: ', error);
       }
@@ -51,7 +54,7 @@ const WorkshopProfile1: React.FC = () => {
   return (
     <SafeAreaView>
       <View style={styles.Container}>
-        <View style={{ width: '100%', height: 60, backgroundColor: '#11046E', flexDirection: 'row' }}>
+        {/* <View style={{ width: '100%', height: 60, backgroundColor: '#11046E', flexDirection: 'row' }}>
           <TouchableOpacity>
             <Icon style={{ marginLeft: 10, justifyContent: 'center', alignItems: 'center', marginTop: 20 }} name="arrow-back" size={24} color="white" />
           </TouchableOpacity>
@@ -63,10 +66,10 @@ const WorkshopProfile1: React.FC = () => {
             fontWeight: 'bold',
             marginTop: 15
           }}>Workshop Profile</Text>
-        </View>
-        <KeyboardAwareScrollView>
+        </View> */}
+        <KeyboardAwareScrollView keyboardShouldPersistTaps={'handled'} >
           <View style={{ marginTop: 40 }}>
-            <Image source={require('../../assets/img/logo.png')} style={{
+            <Image source={require('../../../assets/img/logo.png')} style={{
               width: 100,
               height: 100,
               borderRadius: 50,
@@ -77,7 +80,6 @@ const WorkshopProfile1: React.FC = () => {
               <Text style={styles.label}>Workshop Name</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Mohammed Auto"
                 value={workshopName}
                 onChangeText={setWorkshopName}
                 editable={false}
@@ -85,7 +87,6 @@ const WorkshopProfile1: React.FC = () => {
               <Text style={styles.label}>Owner's Name</Text>
               <TextInput
                 style={styles.input}
-                placeholder="John Doe"
                 value={ownerName}
                 onChangeText={setOwnerName}
                 editable={false}
@@ -93,7 +94,6 @@ const WorkshopProfile1: React.FC = () => {
               <Text style={styles.label}>Address</Text>
               <TextInput
                 style={styles.input}
-                placeholder="123 Main St"
                 value={address}
                 onChangeText={setAddress}
                 editable={false}
@@ -101,7 +101,6 @@ const WorkshopProfile1: React.FC = () => {
               <Text style={styles.label}>Working City</Text>
               <TextInput
                 style={styles.input}
-                placeholder="New York"
                 value={workingCity}
                 onChangeText={setWorkingCity}
                 editable={false}
@@ -109,7 +108,6 @@ const WorkshopProfile1: React.FC = () => {
               <Text style={styles.label}>Specialist Area</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Engine Repair"
                 value={specialistArea}
                 onChangeText={setSpecialistArea}
                 editable={false}
@@ -117,7 +115,6 @@ const WorkshopProfile1: React.FC = () => {
               <Text style={styles.label}>Email</Text>
               <TextInput
                 style={styles.input}
-                placeholder="example@example.com"
                 value={email}
                 onChangeText={setEmail}
                 editable={false}
@@ -125,12 +122,11 @@ const WorkshopProfile1: React.FC = () => {
               <Text style={styles.label}>Mobile</Text>
               <TextInput
                 style={styles.input}
-                placeholder="123-456-7890"
                 value={mobile}
                 onChangeText={setMobile}
                 editable={false}
               />
-              <TouchableOpacity onPress={() => navigation.navigate('workshopscreen2')}  activeOpacity={0.5} >
+              <TouchableOpacity onPress={() => navigation.navigate('EditWorksop' as never)}  activeOpacity={0.5} >
                 <View  style={{
                   backgroundColor: '#11046E',
                   padding: 15,
@@ -153,11 +149,11 @@ const WorkshopProfile1: React.FC = () => {
   );
 };
 
-export default WorkshopProfile1;
+export default WorkshopProfile;
 
 const styles = StyleSheet.create({
   Container: {
-    marginBottom: 150
+    backgroundColor: 'white'
   },
   label: {
     fontWeight: 'bold',

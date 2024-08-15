@@ -8,6 +8,10 @@ import { Icon } from '@rneui/base';
 import WorkshopList from '../screens/WorkshopList';
 
 import SparePartsNavigator from './SparePartsNavigator';
+import WorkshopNavigation from './WorkshopListNavigation';
+import WorkshopProfileNavigation from './WorkshopNavigation';
+import UserProfileNavigation from './UserProfileNavigation';
+
 
 
 
@@ -35,16 +39,16 @@ const TabNavigation = () => {
                         <Text style={{color: focused? '#ED1C24' : '#707477', fontFamily: 'Poppins-Medium', paddingTop: 5}}>Request</Text>
                     </View>
                 )}} />
-                <Tab.Screen name="Workshops" component={HomeScreen} options={{tabBarIcon: ({focused}) => (
+                <Tab.Screen name="Workshops" component={WorkshopNavigation} options={{tabBarIcon: ({focused}) => (
                     <View style={{alignItems: 'center', justifyContent: 'center', marginLeft: '5%'}} >
                         <Image style={{width: 38, height: 38,}} source={focused? require('../../assets/img/Icons/workshopActive.png') : require('../../assets/img/Icons/workshop.png')} />
                         <Text style={{color: focused? '#ED1C24' : '#707477', fontFamily: 'Poppins-Medium'}}>Workshop</Text>
                     </View>
                 )}} />
-                <Tab.Screen name="Chats" component={HomeScreen} options={{tabBarIcon: ({focused}) => (
+                <Tab.Screen name="Profile" component={UserProfileNavigation} options={{tabBarIcon: ({focused}) => (
                     <View style={{alignItems: 'center', justifyContent: 'center'}} >
-                        <Image style={{width: 35, height: 35, marginBottom: '2%'}} source={focused? require('../../assets/img/Icons/chatsActive.png') : require('../../assets/img/Icons/chats.png')} />
-                        <Text style={{color: focused? '#ED1C24' : '#707477', fontFamily: 'Poppins-Medium'}}>Chats</Text>
+                        <Icon name='person-circle' type='ionicon' size={35} style={{marginTop: '1%'}} color={focused? '#ED1C24' : '#707477'} />
+                        <Text style={{color: focused? '#ED1C24' : '#707477', fontFamily: 'Poppins-Medium'}}>Profile</Text>
                     </View>
                 )}} />
             </Tab.Navigator>

@@ -69,7 +69,7 @@ function SignUpSection(p: any) {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [contactNo, setContactNo] = useState('');
     const [nic, setNic] = useState('');
-    const [worshopName, setWorkshopName] = useState('');
+    const [workshopName, setWorkshopName] = useState('');
     const [ownerName, setOwnerName] = useState('');
     const [address, setAddress] = useState('');
     const [workingCity, setWorkingCity] = useState('');
@@ -92,7 +92,7 @@ function SignUpSection(p: any) {
                     email,
                     contactNo,
                     nic,
-                    worshopName,
+                    workshopName,
                     ownerName,
                     address,
                     workingCity,

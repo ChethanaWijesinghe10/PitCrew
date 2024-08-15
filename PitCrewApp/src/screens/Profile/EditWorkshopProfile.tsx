@@ -4,9 +4,11 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { firebase } from '../../firebase/firebaseConfig';
+import { firebase } from '../../../firebase/firebaseConfig';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Appbar } from 'react-native-paper';
 
-const WorkshopProfile: React.FC = () => {
+const EditWorkshopProfile: React.FC = () => {
   const navigation = useNavigation();
 
   const [workshopName, setWorkshopName] = useState('');
@@ -15,49 +17,53 @@ const WorkshopProfile: React.FC = () => {
   const [workingCity, setWorkingCity] = useState('');
   const [specialistArea, setSpecialistArea] = useState('');
   const [email, setEmail] = useState('');
-  const [mobile, setMobile] = useState('');
+  const [contactNo, setContactNo] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const doc = await firebase.firestore().collection('Workshops').doc('Malshan').get();
-        if (doc.exists) {
-          const data = doc.data();
-          if (data) {
-            setWorkshopName(data.workshopName || '');
-            setOwnerName(data.ownerName || '');
-            setAddress(data.address || '');
-            setWorkingCity(data.workingCity || '');
-            setSpecialistArea(data.specialistArea || '');
-            setEmail(data.email || '');
-            setMobile(data.mobile || '');
+      const userId = await AsyncStorage.getItem('USERID');
+      if (userId) {
+        try {
+          const user = await firebase.firestore().collection('Mechanics').doc(userId).get();
+          if (user.exists) {
+            const data = user.data();
+            if (data) {
+              setWorkshopName(data.worshopName || '');
+              setOwnerName(data.ownerName || '');
+              setAddress(data.address || '');
+              setWorkingCity(data.workingCity || '');
+              setSpecialistArea(data.specificArea || '');
+              setEmail(data.email || '');
+              setContactNo(data.contactNo || '');
+            }
+          } else {
+            console.log('No such document!');
           }
-        } else {
-          console.log('No such document!');
+        } catch (error) {
+          console.error('Error fetching document: ', error);
         }
-      } catch (error) {
-        console.error('Error fetching document: ', error);
       }
     };
 
     fetchData();
   }, []);
-  
+
 
   const handleSave = async () => {
-    if (workshopName && ownerName && address && workingCity && specialistArea && email && mobile) {
+    const userId = await AsyncStorage.getItem('USERID');
+    if (workshopName && ownerName && address && workingCity && specialistArea && email && contactNo && userId) {
       try {
-        await firebase.firestore().collection('Workshops').doc(workshopName).set({
+        await firebase.firestore().collection('Mechanics').doc(userId).set({
           workshopName,
           ownerName,
           address,
           workingCity,
-          specialistArea,
+          specificArea: specialistArea,
           email,
-          mobile
+          contactNo
         }, { merge: true });
         Alert.alert("Success", "Successfully saved");
-        navigation.navigate('workshopscreen3');
+        navigation.navigate('workshopscreen' as never);
       } catch (error) {
         console.error("Error saving document: ", error);
         Alert.alert("Error", "Please try again");
@@ -70,22 +76,14 @@ const WorkshopProfile: React.FC = () => {
   return (
     <SafeAreaView>
       <View style={styles.Container}>
-        <View style={{ width: '100%', height: 60, backgroundColor: '#11046E', flexDirection: 'row' }}>
-          <TouchableOpacity onPress={() => navigation.navigate('workshopscreen1')}>
-            <Icon style={{ marginLeft: 10, justifyContent: 'center', alignItems: 'center', marginTop: 20 }} name="arrow-back" size={24} color="white" />
-          </TouchableOpacity>
-          <Text style={{
-            flex: 1,
-            textAlign: 'center',
-            color: '#fff',
-            fontSize: 25,
-            fontWeight: 'bold',
-            marginTop: 15
-          }}>Workshop Profile</Text>
-        </View>
-        <KeyboardAwareScrollView>
+        <Appbar.Header style={{backgroundColor: 'white'}}>
+          <Appbar.BackAction color='black' onPress={() => navigation.navigate('workshopscreen' as never)} />
+          <Appbar.Content title='Workshop Profile' color='black' style={{ alignItems: 'center', }} />
+          <Appbar.Action icon={'cart'} color='white' />
+        </Appbar.Header>
+        <KeyboardAwareScrollView keyboardShouldPersistTaps={'handled'}>
           <View style={{ marginTop: 40 }}>
-            <Image source={require('../../assets/img/logo.png')} style={{
+            <Image source={require('../../../assets/img/logo.png')} style={{
               width: 100,
               height: 100,
               borderRadius: 50,
@@ -146,8 +144,8 @@ const WorkshopProfile: React.FC = () => {
                 style={styles.input}
                 placeholder="123-456-7890"
                 placeholderTextColor={'grey'}
-                value={mobile}
-                onChangeText={setMobile}
+                value={contactNo}
+                onChangeText={setContactNo}
               />
               <TouchableOpacity onPress={handleSave} activeOpacity={0.5}>
                 <View style={{
@@ -172,11 +170,11 @@ const WorkshopProfile: React.FC = () => {
   );
 };
 
-export default WorkshopProfile;
+export default EditWorkshopProfile;
 
 const styles = StyleSheet.create({
   Container: {
-    marginBottom: 150
+    backgroundColor: 'white'
   },
   label: {
     fontWeight: 'bold',
@@ -189,7 +187,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: 5,
     borderRadius: 5,
-    color:'black'
+    color: 'black'
   },
   form: {
     padding: 20,
