@@ -1,17 +1,16 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack';
-import WorkshopProfile1 from '../screens/WorkshopProfile1';
-import WorkshopProfile from '../screens/WorkshopProfile';
 import SaveScreen from '../screens/SaveScreen';
+import EditWorkshopProfile from '../screens/Profile/EditWorkshopProfile';
+import WorkshopProfile from '../screens/Profile/WorkshopProfile';
 
-export default function WorkshopNavigation() {
+export default function WorkshopProfileNavigation() {
     const Stack = createStackNavigator();
   return (
     <Stack.Navigator>
   
-    <Stack.Screen name="workshopscreen1" component={WorkshopProfile1} options={{ headerShown: false }} />
-    <Stack.Screen name="workshopscreen2" component={WorkshopProfile} options={{ headerShown: false }} />
-    <Stack.Screen name="workshopscreen3" component={SaveScreen} options={{ headerShown: false }} />
+    <Stack.Screen name="workshopscreen" component={WorkshopProfile} options={{ headerShown: false }} />
+    <Stack.Screen name="EditWorksop" component={EditWorkshopProfile} options={{ headerShown: false }} />
    
   
    
