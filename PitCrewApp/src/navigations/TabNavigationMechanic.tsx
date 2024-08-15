@@ -5,6 +5,7 @@ import HomeScreen from '../screens/HomeScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { Icon } from '@rneui/base';
 import SparePartsNavigatorMec from './SparePartsNavigatorMec';
+import WorkshopProfileNavigation from './WorkshopNavigation';
 
 
 const Tab = createBottomTabNavigator();
@@ -37,9 +38,9 @@ const TabNavigationMechanic = () => {
                         <Text style={{color: focused? '#ED1C24' : '#707477', fontFamily: 'Poppins-Medium'}}>Workshop</Text>
                     </View>
                 )}} />
-                <Tab.Screen name="Chats" component={HomeScreen} options={{tabBarIcon: ({focused}) => (
+                <Tab.Screen name="Profile" component={WorkshopProfileNavigation} options={{tabBarIcon: ({focused}) => (
                     <View style={{alignItems: 'center', justifyContent: 'center'}} >
-                        <Image style={{width: 35, height: 35, marginBottom: '2%'}} source={focused? require('../../assets/img/Icons/chatsActive.png') : require('../../assets/img/Icons/chats.png')} />
+                        <Icon name='person-circle' type='ionicon' size={35} style={{marginTop: '1%'}} color={focused? '#ED1C24' : '#707477'} />
                         <Text style={{color: focused? '#ED1C24' : '#707477', fontFamily: 'Poppins-Medium'}}>Chats</Text>
                     </View>
                 )}} />

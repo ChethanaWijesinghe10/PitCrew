@@ -6,9 +6,9 @@ import { sty } from './src/styles/Styles';
 import { NavigationContainer } from '@react-navigation/native';
 
 import DrawerNavigation from './src/navigations/DrawerNavigation';
-import WorkshopProfile from './src/screens/WorkshopProfile';
+import WorkshopProfile from './src/screens/Profile/EditWorkshopProfile';
 
-import WorkshopProfile1 from './src/screens/WorkshopProfile1';
+import WorkshopProfile1 from './src/screens/Profile/WorkshopProfile';
 import WorkshopNavigation from './src/navigations/WorkshopNavigation';
 import UserProfile1 from './src/screens/UserProfile1';
 import UserProfile2 from './src/screens/UserProfile2';
@@ -31,38 +31,7 @@ function App(): React.JSX.Element {
         </UserTypeProvider>
       </NavigationContainer>
       <FlashMessage position="bottom" />
-    </View>
-
-    // <View style={sty.AppContainer}>
-    //   <NavigationContainer>
-    //    <WorkshopNavigation />
-    //   </NavigationContainer>
-    // </View>
-    
-    // <View style={sty.AppContainer}>
-    //   <NavigationContainer>
-    //  <UserNavigation />
-    //   </NavigationContainer>
-    // </View>
-    // <WorkshopList/>
-
-    // <View style={sty.AppContainer}>
-    //   <NavigationContainer>
-    //     <WorkshopListNavigation />
-    //   </NavigationContainer>
-    // </View>
-
-<View style={sty.AppContainer}>
-<NavigationContainer>
-<ChatBotScreen />
-</NavigationContainer>
-</View>
-
-  
-
-    
-
-   
+    </View>   
   );
 }
 
