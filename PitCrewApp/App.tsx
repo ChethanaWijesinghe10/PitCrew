@@ -14,7 +14,7 @@ import UserProfile1 from './src/screens/UserProfile1';
 import UserProfile2 from './src/screens/UserProfile2';
 import UserNavigation from './src/navigations/UserNavigation';
 import WorkshopList from './src/screens/WorkshopList';
-import WorkshopListNavigation from './src/navigations/WorkshopListNavigation';
+
 import ChatBotScreen from './src/screens/ChatBotScreen';
 
 import { UserTypeProvider } from './src/components/UserTypeContext';
@@ -27,11 +27,15 @@ function App(): React.JSX.Element {
     <View style={sty.AppContainer}>
       <NavigationContainer>
         <UserTypeProvider>
-          <AppNavigation />
+          {/* <AppNavigation /> */}
+         <WorkshopList/>
         </UserTypeProvider>
       </NavigationContainer>
       <FlashMessage position="bottom" />
+
     </View>   
+
+    
   );
 }
 
