@@ -6,7 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { Icon } from '@rneui/base';
 import SparePartsNavigatorMec from './SparePartsNavigatorMec';
 import WorkshopProfileNavigation from './WorkshopNavigation';
-import WorkshopNavigation from './WorkshopListNavigation';
+import WorkshopNavigation from './WorkshopNavigation';
 
 
 const Tab = createBottomTabNavigator();

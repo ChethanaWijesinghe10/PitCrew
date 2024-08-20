@@ -5,8 +5,9 @@ import HomeScreen from '../screens/HomeScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { Icon } from '@rneui/base';
 import SparePartsNavigator from './SparePartsNavigator';
-import WorkshopNavigation from './WorkshopListNavigation';
 import UserProfileNavigation from './UserProfileNavigation';
+import WorkshopNavigation from './WorkshopNavigation';
+import WorkshopList from '../screens/WorkshopList';
 
 const Tab = createBottomTabNavigator();
 
@@ -32,7 +33,7 @@ const TabNavigation = () => {
                         <Text style={[styles.iconText, {color: focused? '#ED1C24' : '#707477'},]}>Request</Text>
                     </View>
                 )}} />
-                <Tab.Screen name="Workshops" component={WorkshopNavigation} options={{tabBarIcon: ({focused}) => (
+                <Tab.Screen name="Workshops" component={WorkshopList} options={{tabBarIcon: ({focused}) => (
                     <View style={styles.iconContainer} >
                         <Image style={{width: 35, height: 35,}} source={focused? require('../../assets/img/Icons/workshopActive.png') : require('../../assets/img/Icons/workshop.png')} />
                         <Text style={[styles.iconText, {color: focused? '#ED1C24' : '#707477'},]}>Workshop</Text>

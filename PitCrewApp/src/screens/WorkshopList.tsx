@@ -20,16 +20,6 @@ const WorkshopList = () => {
     return () => unsubscribe();
   }, []);
 
-  const deleteWorkshop = (id: string | undefined) => {
-    firestore()
-      .collection('Mechanics')
-      .doc(id)
-      .delete()
-      .then(() => {
-        Alert.alert('Workshop deleted!', 'The workshop has been successfully deleted.');
-      });
-  };
-
   const openMap = (address: string | number | boolean) => {
     const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
     Linking.openURL(url).catch(err => console.error('An error occurred', err));
@@ -44,9 +34,6 @@ const WorkshopList = () => {
         <Text style={styles.description}>{item.description}</Text>
         <Text style={styles.address}>{item.address}</Text>
         <View style={styles.iconsContainer}>
-          <TouchableOpacity onPress={() => deleteWorkshop(item.id)}>
-            <Icon name="delete" size={30} color="#ff0000" />
-          </TouchableOpacity>
           <TouchableOpacity onPress={() => openMap(item.address)}>
             <Icon name="map" size={30} color="#4285F4" />
           </TouchableOpacity>
@@ -57,15 +44,8 @@ const WorkshopList = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.searchContainer}>
-        <Icon name="search" size={24} color="gray" style={styles.searchIcon} />
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search Location"
-          placeholderTextColor="grey"
-          value={searchText}
-          onChangeText={handleSearch}
-        />
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Workshop List</Text>
       </View>
       <FlatList
         data={workshops}

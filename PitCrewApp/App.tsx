@@ -14,8 +14,7 @@ function App(): React.JSX.Element {
     <View style={sty.AppContainer}>
       <NavigationContainer>
         <UserTypeProvider>
-          {/* <AppNavigation /> */}
-         <WorkshopList/>
+          <AppNavigation />
         </UserTypeProvider>
       </NavigationContainer>
       <FlashMessage position="bottom" />
