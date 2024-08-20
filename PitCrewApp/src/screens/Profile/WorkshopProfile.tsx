@@ -19,6 +19,7 @@ const WorkshopProfile: React.FC = () => {
   const [specialistArea, setSpecialistArea] = useState('');
   const [email, setEmail] = useState('');
   const [mobile, setMobile] = useState('');
+  const [description, setDescription] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,6 +39,7 @@ const WorkshopProfile: React.FC = () => {
             setSpecialistArea(data.specificArea || '');
             setEmail(data.email || '');
             setMobile(data.contactNo || '');
+            setDescription(data.description || '');
           }
         } else {
           console.log('No such document!');
@@ -54,19 +56,6 @@ const WorkshopProfile: React.FC = () => {
   return (
     <SafeAreaView>
       <View style={styles.Container}>
-        {/* <View style={{ width: '100%', height: 60, backgroundColor: '#11046E', flexDirection: 'row' }}>
-          <TouchableOpacity>
-            <Icon style={{ marginLeft: 10, justifyContent: 'center', alignItems: 'center', marginTop: 20 }} name="arrow-back" size={24} color="white" />
-          </TouchableOpacity>
-          <Text style={{
-            flex: 1,
-            textAlign: 'center',
-            color: '#fff',
-            fontSize: 25,
-            fontWeight: 'bold',
-            marginTop: 15
-          }}>Workshop Profile</Text>
-        </View> */}
         <KeyboardAwareScrollView keyboardShouldPersistTaps={'handled'} >
           <View style={{ marginTop: 40 }}>
             <Image source={require('../../../assets/img/logo.png')} style={{
@@ -124,6 +113,15 @@ const WorkshopProfile: React.FC = () => {
                 style={styles.input}
                 value={mobile}
                 onChangeText={setMobile}
+                editable={false}
+              />
+              <Text style={styles.label}>Description</Text>
+              <TextInput
+                multiline={true}
+                numberOfLines={5}
+                style={styles.input}
+                value={description}
+                onChangeText={setDescription}
                 editable={false}
               />
               <TouchableOpacity onPress={() => navigation.navigate('EditWorksop' as never)}  activeOpacity={0.5} >

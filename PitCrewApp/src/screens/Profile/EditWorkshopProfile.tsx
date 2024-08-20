@@ -18,6 +18,7 @@ const EditWorkshopProfile: React.FC = () => {
   const [specialistArea, setSpecialistArea] = useState('');
   const [email, setEmail] = useState('');
   const [contactNo, setContactNo] = useState('');
+  const [description, setDescription] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,6 +36,7 @@ const EditWorkshopProfile: React.FC = () => {
               setSpecialistArea(data.specificArea || '');
               setEmail(data.email || '');
               setContactNo(data.contactNo || '');
+              setDescription(data.description || '');
             }
           } else {
             console.log('No such document!');
@@ -51,7 +53,7 @@ const EditWorkshopProfile: React.FC = () => {
 
   const handleSave = async () => {
     const userId = await AsyncStorage.getItem('USERID');
-    if (workshopName && ownerName && address && workingCity && specialistArea && email && contactNo && userId) {
+    if (workshopName && ownerName && address && workingCity && specialistArea && email && contactNo && description && userId) {
       try {
         await firebase.firestore().collection('Mechanics').doc(userId).set({
           workshopName,
@@ -60,7 +62,8 @@ const EditWorkshopProfile: React.FC = () => {
           workingCity,
           specificArea: specialistArea,
           email,
-          contactNo
+          contactNo,
+          description
         }, { merge: true });
         Alert.alert("Success", "Successfully saved");
         navigation.navigate('workshopscreen' as never);
@@ -76,12 +79,12 @@ const EditWorkshopProfile: React.FC = () => {
   return (
     <SafeAreaView>
       <View style={styles.Container}>
-        <Appbar.Header style={{backgroundColor: 'white'}}>
+      <KeyboardAwareScrollView keyboardShouldPersistTaps={'handled'} >
+        <Appbar.Header style={{ backgroundColor: 'white' }}>
           <Appbar.BackAction color='black' onPress={() => navigation.navigate('workshopscreen' as never)} />
           <Appbar.Content title='Workshop Profile' color='black' style={{ alignItems: 'center', }} />
           <Appbar.Action icon={'cart'} color='white' />
         </Appbar.Header>
-        <KeyboardAwareScrollView keyboardShouldPersistTaps={'handled'}>
           <View style={{ marginTop: 40 }}>
             <Image source={require('../../../assets/img/logo.png')} style={{
               width: 100,
@@ -139,13 +142,23 @@ const EditWorkshopProfile: React.FC = () => {
                 value={email}
                 onChangeText={setEmail}
               />
-              <Text style={styles.label}>Mobile</Text>
+              <Text style={styles.label}>Contact No</Text>
               <TextInput
                 style={styles.input}
                 placeholder="123-456-7890"
                 placeholderTextColor={'grey'}
                 value={contactNo}
                 onChangeText={setContactNo}
+              />
+              <Text style={styles.label}>Description</Text>
+              <TextInput
+                style={styles.input}
+                multiline={true}
+                numberOfLines={4}
+                placeholder="Enter a description"
+                placeholderTextColor={'grey'}
+                value={description}
+                onChangeText={setDescription}
               />
               <TouchableOpacity onPress={handleSave} activeOpacity={0.5}>
                 <View style={{
@@ -175,6 +188,10 @@ export default EditWorkshopProfile;
 const styles = StyleSheet.create({
   Container: {
     backgroundColor: 'white'
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center'
   },
   label: {
     fontWeight: 'bold',

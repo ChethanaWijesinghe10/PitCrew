@@ -1,11 +1,20 @@
 import { View, Text, StatusBar, Image, ScrollView, BackHandler, Alert } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Appbar, Drawer } from 'react-native-paper'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
+import firebase from 'firebase/compat/app'
+import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore'
+
+interface ItemData {
+  id: string;
+  data: FirebaseFirestoreTypes.DocumentData;
+}
 
 const HomeScreen = (navigation: any) => {
 
+  const [spareParts, setSpareParts] = useState<ItemData[]>([]);
+  const [workshop, setWorkshop] = useState<ItemData[]>([]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -23,15 +32,65 @@ const HomeScreen = (navigation: any) => {
         ]);
         return true;
       };
-  
+
       BackHandler.addEventListener('hardwareBackPress', handleBackPress);
-  
+
       return () => {
         BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
       };
     }, []),
   );
-  
+
+  useEffect(() => {
+    getSpareParts();
+    getMechanics();
+  }, [])
+
+
+  const getSpareParts = async () => {
+    try {
+      const data = await firebase.firestore().collection('items');
+      const querySnapshot = await data.get();
+
+      const tempData: ItemData[] = [];
+
+      querySnapshot.forEach(collectionSnapshot => {
+        tempData.push({
+          id: collectionSnapshot.id,
+          data: collectionSnapshot.data(),
+        });
+      })
+
+      setSpareParts(tempData);
+      console.log(spareParts)
+
+    } catch (error) {
+      console.error('Error fetching spareparts: ', error);
+    }
+  }
+
+  const getMechanics = async () => {
+    try {
+      const data = await firebase.firestore().collection('Mechanics');
+      const querySnapshot = await data.get();
+
+      console.log(querySnapshot.size);
+
+      const mecData: ItemData[] = [];
+
+      querySnapshot.forEach(collectionSnapshot => {
+        mecData.push({
+          id: collectionSnapshot.id,
+          data: collectionSnapshot.data(),
+        })
+      })
+      setWorkshop(mecData);
+      console.log(workshop);
+    } catch (error) {
+      console.error('Error fetching mechanics: ', error);
+    }
+  }
+
   return (
     <SafeAreaProvider>
       <View>
@@ -48,10 +107,25 @@ const HomeScreen = (navigation: any) => {
 
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <View style={{ flexDirection: 'row', width: 600, paddingLeft: '5%' }}>
-            <RecentlyAdded img={require('../../assets/img/SpareParts/steeringWheel.png')} title={'Steering wheel covers'} discount={'Upto 50% off'} price={'75 000'} />
-            <RecentlyAdded img={require('../../assets/img/SpareParts/bulb.png')} title={'Light Bulbs'} discount={'Upto 25% off'} price={'10 000'} />
-            <RecentlyAdded img={require('../../assets/img/SpareParts/knob.png')} title={'Steering wheel knobs'} discount={'Upto 30% off'} price={'5 000'} />
+          <View style={{ flexDirection: 'row', width: 600, paddingLeft: '5%', }}>
+            {spareParts.map(item => {
+              return (
+                <View key={item.id} style={{ marginTop: '2%', flexDirection: 'column' }}>
+                  <View style={{ width: 170, height: 230, backgroundColor: 'white', alignItems: 'center', marginRight: '2%' }}>
+                    <View style={{ marginTop: '5%' }}>
+                      <Image source={{ uri: item.data.imageUrl }} style={{ width: 130, height: 130 }} />
+                    </View>
+                    <View style={{ marginTop: '5%', alignItems: 'center' }}>
+                      <Text style={{ color: '#02010B', fontFamily: 'Poppins-SemiBold', fontSize: 18 }}>{item.data.name}</Text>
+                      <Text style={{ paddingBottom: 5, textDecorationLine: 'line-through' }} >{'Rs. ' + item.data.price}</Text>
+                    </View>
+                    <View style={{ width: 170, height: 30, backgroundColor: '#291D7D', justifyContent: 'center' }}>
+                      <Text style={{ color: '#FF0000', textAlign: 'center', fontFamily: 'Poppins-SemiBold', fontSize: 18, paddingTop: 2 }}>{'Rs. ' + item.data.discountPrice}</Text>
+                    </View>
+                  </View>
+                </View>
+              );
+            })}
           </View>
         </ScrollView>
 
@@ -66,56 +140,25 @@ const HomeScreen = (navigation: any) => {
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View style={{ flexDirection: 'row', width: 700, paddingLeft: '4.5%' }}>
-            <PopularWorkshops img={require('../../assets/img/WorkShops/ws1.png')} name={'Auto King Workshop'} place={'Muscat, Oman'} />
-            <PopularWorkshops img={require('../../assets/img/WorkShops/ws2.png')} name={'Auto King Workshop'} place={'Muscat, Oman'} />
-            <PopularWorkshops img={require('../../assets/img/WorkShops/ws3.png')} name={'Auto King Workshop'} place={'Muscat, Oman'} />
+            {workshop.map(item => {
+              return (
+                <View key={item.id} style={{ marginTop: '2%', flexDirection: 'column' }}>
+                  <View style={{ width: 200, height: 220, alignItems: 'center', marginRight: '2%', backgroundColor: 'red' }}>
+                    <Image source={require('../../assets/img/WorkShops/ws1.png')} style={{ width: 200, height: 160 }} />
+                    <View style={{ width: 200, height: 60, backgroundColor: '#291D7D', justifyContent: 'center' }}>
+                      <Text style={{ color: 'white', textAlign: 'center', fontFamily: 'Poppins-SemiBold', fontSize: 16 }}>{item.data.workshopName}</Text>
+                      <Text style={{ color: '#FFA500', textAlign: 'center', fontFamily: 'Poppins-Medium', fontSize: 16 }}>{item.data.address}</Text>
+                    </View>
+                  </View>
+                </View>
+              );
+            })}
           </View>
         </ScrollView>
 
-
       </View>
-
-
-
     </SafeAreaProvider>
   )
 }
-
-function RecentlyAdded(p: any) {
-  return (
-    <View style={{ marginTop: '2%', flexDirection: 'column' }}>
-      <View style={{ width: 170, height: 230, backgroundColor: '#FAFAFA', alignItems: 'center', marginRight: '2%' }}>
-        <View style={{ marginTop: '5%' }}>
-          <Image source={p.img} />
-        </View>
-        <View style={{ marginTop: '5%', alignItems: 'center' }}>
-          <Text style={{ color: '#02010B', fontFamily: 'Poppins-Medium' }}>{p.title}</Text>
-          <Text style={{ width: 100, height: 20, color: '#67676D', backgroundColor: '#E8E7E7', textAlign: 'center', fontFamily: 'Poppins-Medium' }}>{p.discount}</Text>
-          <Text style={{ fontFamily: 'Poppins-SemiBold', color: '#ED1C24' }}>Rs.{p.price}</Text>
-        </View>
-        <View style={{ width: 170, height: 30, backgroundColor: '#291D7D', justifyContent: 'center' }}>
-          <Text style={{ color: 'white', textAlign: 'center', fontFamily: 'Poppins-Medium', fontSize: 16 }}>ADD TO CART</Text>
-        </View>
-      </View>
-    </View>
-  );
-}
-
-function PopularWorkshops(p: any) {
-  return (
-    <View style={{ marginTop: '2%', flexDirection: 'column' }}>
-      <View style={{ width: 200, height: 220, alignItems: 'center', marginRight: '2%', backgroundColor: 'red' }}>
-        <Image source={p.img} style={{ width: 200, height: 160 }} />
-        <View style={{ width: 200, height: 60, backgroundColor: '#291D7D', justifyContent: 'center' }}>
-          <Text style={{ color: 'white', textAlign: 'center', fontFamily: 'Poppins-SemiBold', fontSize: 16 }}>{p.name}</Text>
-          <Text style={{ color: '#67676D', textAlign: 'center', fontFamily: 'Poppins-Medium', fontSize: 16 }}>{p.place}</Text>
-        </View>
-      </View>
-    </View>
-  );
-}
-
-
-
 
 export default HomeScreen
