@@ -1,59 +1,69 @@
-import { View, Text, Image } from 'react-native'
+import { View, Text, Image, StyleSheet } from 'react-native'
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { Icon } from '@rneui/base';
-
-import WorkshopList from '../screens/WorkshopList';
-
 import SparePartsNavigator from './SparePartsNavigator';
 import WorkshopNavigation from './WorkshopListNavigation';
-import WorkshopProfileNavigation from './WorkshopNavigation';
 import UserProfileNavigation from './UserProfileNavigation';
-
-
-
 
 const Tab = createBottomTabNavigator();
 
 const TabNavigation = () => {
     return (
         <NavigationContainer independent={true}>
-            <Tab.Navigator screenOptions={{headerShown: false, tabBarShowLabel: false, tabBarStyle:{height: 70} }}  >
+            <Tab.Navigator screenOptions={{headerShown: false, tabBarShowLabel: false, tabBarStyle: styles.tabBar }}  >
                 <Tab.Screen name="Home" component={HomeScreen} options={{tabBarIcon: ({focused}) => (
-                    <View style={{alignItems: 'center', justifyContent: 'center'}} >
+                    <View style={styles.iconContainer} >
                         <Icon name='home' type='material' size={35} color={focused? '#ED1C24' : '#707477'} />
-                        <Text style={{color: focused? '#ED1C24' : '#707477', fontFamily: 'Poppins-Medium'}}>Home</Text>
+                        <Text style={[styles.iconText, {color: focused? '#ED1C24' : '#707477'},]}>Home</Text>
                     </View>
                 )}}/>
                 <Tab.Screen name="Spare Parts" component={SparePartsNavigator} options={{tabBarIcon: ({focused}) => (
-                    <View style={{alignItems: 'center', justifyContent: 'center'}} >
+                   <View style={styles.iconContainer} >
                         <Icon name='settings' type='material' size={32} style={{marginTop: '1%'}} color={focused? '#ED1C24' : '#707477'} />
-                        <Text style={{color: focused? '#ED1C24' : '#707477', fontFamily: 'Poppins-Medium', marginTop: 3}}>Parts</Text>
+                        <Text style={[styles.iconText, {color: focused? '#ED1C24' : '#707477'},]}>Parts</Text>
                     </View>
                 )}} />
                 <Tab.Screen name="Request" component={HomeScreen} options={{tabBarIcon: ({focused}) => (
-                    <View style={{alignItems: 'center', justifyContent: 'center'}} >
-                        <Icon name='pluscircle' type='antdesign' size={30} color={focused? '#ED1C24' : '#707477'} />
-                        <Text style={{color: focused? '#ED1C24' : '#707477', fontFamily: 'Poppins-Medium', paddingTop: 5}}>Request</Text>
+                    <View style={styles.iconContainer} >
+                        <Icon name='plus-circle' type='material-community' size={35} color={focused? '#ED1C24' : '#707477'} />
+                        <Text style={[styles.iconText, {color: focused? '#ED1C24' : '#707477'},]}>Request</Text>
                     </View>
                 )}} />
                 <Tab.Screen name="Workshops" component={WorkshopNavigation} options={{tabBarIcon: ({focused}) => (
-                    <View style={{alignItems: 'center', justifyContent: 'center', marginLeft: '5%'}} >
-                        <Image style={{width: 38, height: 38,}} source={focused? require('../../assets/img/Icons/workshopActive.png') : require('../../assets/img/Icons/workshop.png')} />
-                        <Text style={{color: focused? '#ED1C24' : '#707477', fontFamily: 'Poppins-Medium'}}>Workshop</Text>
+                    <View style={styles.iconContainer} >
+                        <Image style={{width: 35, height: 35,}} source={focused? require('../../assets/img/Icons/workshopActive.png') : require('../../assets/img/Icons/workshop.png')} />
+                        <Text style={[styles.iconText, {color: focused? '#ED1C24' : '#707477'},]}>Workshop</Text>
                     </View>
                 )}} />
                 <Tab.Screen name="Profile" component={UserProfileNavigation} options={{tabBarIcon: ({focused}) => (
-                    <View style={{alignItems: 'center', justifyContent: 'center'}} >
-                        <Icon name='person-circle' type='ionicon' size={35} style={{marginTop: '1%'}} color={focused? '#ED1C24' : '#707477'} />
-                        <Text style={{color: focused? '#ED1C24' : '#707477', fontFamily: 'Poppins-Medium'}}>Profile</Text>
+                    <View style={styles.iconContainer} >
+                        <Icon name='person-circle' type='ionicon' size={35} color={focused? '#ED1C24' : '#707477'} />
+                        <Text style={[styles.iconText, {color: focused? '#ED1C24' : '#707477'},]}>Profile</Text>
                     </View>
                 )}} />
             </Tab.Navigator>
         </NavigationContainer>
     )
 }
+
+const styles = StyleSheet.create({
+    tabBar: {
+        height: 70,
+        paddingHorizontal: 5
+    },
+    iconContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1
+    },
+    iconText: {
+        fontFamily: 'Poppins-Medium',
+        marginTop: 3,
+        textAlign: 'center'
+    }
+})
 
 export default TabNavigation

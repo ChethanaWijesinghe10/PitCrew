@@ -125,47 +125,6 @@ const WorkshopList = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handleMenuToggle}>
-          <Icon style={styles.menuIcon} name="menu" size={35} color="white" />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>PitCrew</Text>
-       
-      </View>
-
-      {menuVisible && (
-        <View style={styles.dropdownMenu}>
-          <TouchableOpacity style={styles.menuItem}>
-            <Icon name="person" size={24} color="white" />
-            <Text style={styles.menuText}>Profile</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem}>
-            <Icon name="history" size={24} color="white" />
-            <Text style={styles.menuText}>Inquiry History</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem}>
-            <Icon name="local-gas-station" size={24} color="white" />
-            <Text style={styles.menuText}>Fuel Usage</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem}>
-            <Icon name="chat" size={24} color="white" />
-            <Text style={styles.menuText}>Chat bot</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem}>
-            <Icon name="phone" size={24} color="white" />
-            <Text style={styles.menuText}>Contact us</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem}>
-            <Icon name="share" size={24} color="white" />
-            <Text style={styles.menuText}>Share</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem}>
-            <Icon name="logout" size={24} color="white" />
-            <Text style={styles.menuText}>Log out</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-
       <View style={styles.searchContainer}>
         <Icon name="search" size={24} color="gray" style={styles.searchIcon} />
         <TextInput

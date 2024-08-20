@@ -21,10 +21,10 @@ const WorkshopDetails = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.navigate('WorkshopList')}>
-          <Icon style={styles.menuIcon} name="arrow-back" size={35} color="white" />
+        <TouchableOpacity onPress={() => navigation.navigate('WorkshopList' as never)}>
+          <Icon style={styles.menuIcon} name="arrow-back" size={25} color="black" />
         </TouchableOpacity>
-        <Text style={styles.headerText}>PitCrew Work Shop</Text>
+        <Text style={styles.headerText}>{workshop.name}</Text>
       </View>
       
       <View style={styles.detailsContainer}>
@@ -50,7 +50,6 @@ const styles = StyleSheet.create({
   header: {
     width: '100%',
     height: 60,
-    backgroundColor: '#11046E', 
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 10,
@@ -59,9 +58,9 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   headerText: {
-    color: '#fff',
+    color: 'black',
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: '500',
     flex: 1,
     textAlign: 'center',
   },
