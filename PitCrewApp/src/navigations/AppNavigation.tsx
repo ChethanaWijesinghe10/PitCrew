@@ -3,16 +3,15 @@ import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { NavigationContainer } from '@react-navigation/native';
 import SplashScreen from '../screens/SplashScreen';
-import WelcomeScreen from '../screens/WelcomeScreen';
-import SigninScreen from '../screens/SigninScreen';
-import SignupWelcomeScreen from '../screens/SignupWelcomeScreen';
-import SignUpUser from '../screens/SignUpUser';
-import SignUpMechanic from '../screens/SignUpMechanic';
-import DrawerNavigation from './DrawerNavigation';
-import DrawerNavigationMechanic from './DrawerNavigationMechanic';
-import SignUpAdmin from '../screens/SignUpAdmin';
-import DrawerNavigationAdmin from './DrawerNavigationAdmin';
-import TabNavigationAdmin from './TabNavigationAdmin';
+import WelcomeScreen from '../screens/Authentication/WelcomeScreen';
+import SigninScreen from '../screens/Authentication/SigninScreen';
+import SignupWelcomeScreen from '../screens/Authentication/SignupWelcomeScreen';
+import SignUpUser from '../screens/Authentication/SignUpUser';
+import SignUpMechanic from '../screens/Authentication/SignUpMechanic';
+import SignUpAdmin from '../screens/Authentication/SignUpAdmin';
+import TabNavigationAdmin from './Admin/TabNavigationAdmin';
+import DrawerNavigation from './VehicleOwner/DrawerNavigation';
+import DrawerNavigationMechanic from './Mechanic/DrawerNavigationMechanic';
 
 
 const Stack = createStackNavigator();

@@ -1,8 +1,7 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack';
-import SaveScreen from '../screens/SaveScreen';
-import EditWorkshopProfile from '../screens/Profile/EditWorkshopProfile';
-import WorkshopProfile from '../screens/Profile/WorkshopProfile';
+import EditWorkshopProfile from '../../screens/Profile/EditWorkshopProfile';
+import WorkshopProfile from '../../screens/Profile/WorkshopProfile';
 
 export default function WorkshopProfileNavigation() {
     const Stack = createStackNavigator();

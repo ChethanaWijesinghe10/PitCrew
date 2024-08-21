@@ -2,12 +2,12 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, StackNavigationOptions } from '@react-navigation/stack';
-import ProductList from '../screens/SpareParts/VehicleOwner/ProductList';
-import Cart from '../screens/SpareParts/VehicleOwner/Cart';
-import Checkout from '../screens/SpareParts/VehicleOwner/Checkout';
-import Address from '../screens/SpareParts/VehicleOwner/Address';
-import AddNewAddress from '../screens/SpareParts/VehicleOwner/AddNewAddress';
-import OrderStatus from '../screens/SpareParts/VehicleOwner/OrderStatus';
+import ProductList from '../../screens/SpareParts/VehicleOwner/ProductList';
+import Cart from '../../screens/SpareParts/VehicleOwner/Cart';
+import Checkout from '../../screens/SpareParts/VehicleOwner/Checkout';
+import Address from '../../screens/SpareParts/VehicleOwner/Address';
+import AddNewAddress from '../../screens/SpareParts/VehicleOwner/AddNewAddress';
+import OrderStatus from '../../screens/SpareParts/VehicleOwner/OrderStatus';
 
 export type RootStackParamList = {
   Splash: undefined;

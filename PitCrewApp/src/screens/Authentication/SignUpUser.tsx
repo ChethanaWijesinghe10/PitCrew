@@ -1,14 +1,14 @@
 import { View, Text, TextInput, Alert } from 'react-native'
 import React, { useState } from 'react'
-import { sty } from '../styles/Styles'
+import { sty } from '../../styles/Styles'
 import { Appbar, Button } from 'react-native-paper'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import '@react-native-firebase/auth';
-import { firebase } from '../../firebase/firebaseConfig'
+import { firebase } from '../../../firebase/firebaseConfig'
 import { useNavigation } from '@react-navigation/native'
 
 
-const SignUpAdmin = (props: any) => {
+const SignUpUser = (props: any) => {
 
     const stack = props.navigation;
 
@@ -16,7 +16,7 @@ const SignUpAdmin = (props: any) => {
         <View style={sty.AppContainer}>
             <HeaderSignUp hs_stack={stack} />
             <Text style={{ marginTop: '7.5%', marginLeft: '8%', color: '#02010B', marginBottom: '5%', }}>
-                Enter admin details to register
+                Enter your details to register
             </Text>
             <SignUpSection ss_stack={stack} />
         </View>
@@ -46,6 +46,8 @@ function SignUpSection(p: any) {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [name, setName] = useState('');
+    const [nic, setNic] = useState('');
+    const [contactNo, setContactNo] = useState('');
 
     const onPressRegister = async (p: any) => {
 
@@ -62,14 +64,16 @@ function SignUpSection(p: any) {
                 const data = {
                     id: uid,
                     email,
-                    name
+                    name,
+                    nic,
+                    contactNo,
                 };
 
-                const usersRef = firebase.firestore().collection('Admin').doc(uid);
+                const usersRef = firebase.firestore().collection('VehicleOwners').doc(uid);
                 await usersRef.set(data);
 
-                // await firebase.auth().currentUser?.sendEmailVerification();
-                Alert.alert("Success", "Admin created successfully! \nPlease verify your email address to proceed.");
+                await firebase.auth().currentUser?.sendEmailVerification();
+                Alert.alert("Success", "User created successfully! \nPlease verify your email address to proceed.");
                 nav.navigate('SignIn');
             } else {
                 console.error('User object not available in response');
@@ -117,6 +121,21 @@ function SignUpSection(p: any) {
                     autoCapitalize='sentences'
                     style={{ marginHorizontal: '5%', color: 'black' }} />
                 </View>
+                <View style={sty.TextInputField}>
+                    <TextInput 
+                    onChangeText={(text) => setNic(text)} 
+                    placeholder='NIC' 
+                    placeholderTextColor={'#B3B3B6'} 
+                    style={{ marginHorizontal: '5%', color: 'black' }} />
+                </View>
+                <View style={sty.TextInputField}>
+                    <TextInput 
+                    onChangeText={(text) => setContactNo(text)} 
+                    placeholder='Contact No' 
+                    placeholderTextColor={'#B3B3B6'} 
+                    keyboardType='numeric'
+                    style={{ marginHorizontal: '5%', color: 'black' }} />
+                </View>
 
                 <Button
                     onPress={onPressRegister}
@@ -139,4 +158,4 @@ function SignUpSection(p: any) {
 }
 
 
-export default SignUpAdmin
+export default SignUpUser

@@ -2,13 +2,13 @@ import * as React from 'react';
 import { Button, View } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
-import TabNavigation from '../navigations/TabNavigation';
-import CustomDrawer from './CustomDrawer';
+import TabNavigation from '../VehicleOwner/TabNavigation';
+import CustomDrawer from '../CustomDrawer';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import TabNavigationMechanic from './TabNavigationMechanic';
 import { Icon } from '@rneui/base';
-import FuelNavigator from './FuelNavigator';
-import ContactUsScreen from '../screens/ContactUsScreen';
+import FuelNavigator from '../VehicleOwner/FuelNavigator';
+import ContactUsScreen from '../../screens/ContactUsScreen';
 
 const Drawer = createDrawerNavigator();
 

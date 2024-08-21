@@ -2,12 +2,13 @@ import * as React from 'react';
 import { Button, View } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
-import TabNavigation from '../navigations/TabNavigation';
-import CustomDrawer from './CustomDrawer';
+import TabNavigation from './TabNavigation';
+import CustomDrawer from '../CustomDrawer';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FuelNavigator from './FuelNavigator';
 import { Icon } from '@rneui/base';
-import ContactUsScreen from '../screens/ContactUsScreen';
+import ContactUsScreen from '../../screens/ContactUsScreen';
+import ChatBotScreen from '../../screens/ChatBotScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -36,6 +37,15 @@ const DrawerNavigation = (props: any) => {
         <Drawer.Screen name="Maintenance Records" component={FuelNavigator} 
         options={{ 
           headerTitle: 'Maintenance Records',
+          headerTitleAlign:'center', 
+          headerTitleStyle: {fontSize: 23 }, 
+          drawerItemStyle: {marginTop: 20}, 
+          drawerIcon: ({color}) => {
+          return <Icon name="gas-station" type='material-community' size={22} color={color} style={{marginLeft: 5}} />;
+        }, }}/>
+        <Drawer.Screen name="Chat Bot" component={ChatBotScreen} 
+        options={{ 
+          headerTitle: 'ChatBot',
           headerTitleAlign:'center', 
           headerTitleStyle: {fontSize: 23 }, 
           drawerItemStyle: {marginTop: 20}, 

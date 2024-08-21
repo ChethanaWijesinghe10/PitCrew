@@ -1,10 +1,9 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack';
-import SaveScreen from '../screens/SaveScreen';
-import UserProfile from '../screens/Profile/UserProfile';
-import EditUserProfile from '../screens/Profile/EditUserProfile';
-import AdminProfile from '../screens/Profile/AdminProfile';
-import EditAdminProfile from '../screens/Profile/EditAdminProfile';
+import UserProfile from '../../screens/Profile/UserProfile';
+import EditUserProfile from '../../screens/Profile/EditUserProfile';
+import AdminProfile from '../../screens/Profile/AdminProfile';
+import EditAdminProfile from '../../screens/Profile/EditAdminProfile';
 
 export default function AdminProfileNavigation() {
     const Stack = createStackNavigator();

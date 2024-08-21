@@ -1,6 +1,6 @@
 import { View, Text, TextInput, Alert } from 'react-native'
 import React, { useState } from 'react'
-import { sty } from '../styles/Styles'
+import { sty } from '../../styles/Styles'
 import { HeaderSignUp } from './SignUpUser'
 import { Button } from 'react-native-paper'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
