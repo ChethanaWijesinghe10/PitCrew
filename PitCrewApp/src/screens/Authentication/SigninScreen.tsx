@@ -1,15 +1,15 @@
 import { View, Text, StatusBar, TouchableOpacity, Image, TextInput, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { sty } from '../styles/Styles'
+import { sty } from '../../styles/Styles'
 import { ActivityIndicator, Appbar, Button } from 'react-native-paper'
-import { firebase, firebaseConfig } from '../../firebase/firebaseConfig'
+import { firebase, firebaseConfig } from '../../../firebase/firebaseConfig'
 import 'firebase/compat/auth';
 import { useNavigation } from '@react-navigation/native'
 import { GoogleSignin } from '@react-native-google-signin/google-signin'; 
 import auth from '@react-native-firebase/auth';
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import { initializeApp } from 'firebase/app'
-import { useUserType } from '../components/UserTypeContext'
+import { useUserType } from '../../components/UserTypeContext'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const SigninScreen = (props: any) => {
@@ -79,7 +79,7 @@ const SigninScreen = (props: any) => {
                 <Appbar.BackAction color='#584F9A' style={sty.BackIcon} onPress={() => { stack.navigate('Welcome') }} />
                 <Text style={sty.BackWord}>Back</Text>
             </Appbar.Header>
-            <Image source={require('../../assets/img/logoWhite.jpg')} style={{ alignSelf: 'center', width: 150, height: 150 }} />
+            <Image source={require('../../../assets/img/logoWhite.jpg')} style={{ alignSelf: 'center', width: 150, height: 150 }} />
 
             <SignInSection />
 
@@ -102,7 +102,7 @@ const SigninScreen = (props: any) => {
                     marginTop: '6%',
                     marginHorizontal: '8%'
                 }}>
-                    <Image source={require('../../assets/img/iconGoogle.png')} style={{ marginLeft: '15%' }} />
+                    <Image source={require('../../../assets/img/iconGoogle.png')} style={{ marginLeft: '15%' }} />
                     <Text style={{ marginLeft: '12%', fontSize: 16, color: 'white' }}>
                         Continue with Google
                     </Text>

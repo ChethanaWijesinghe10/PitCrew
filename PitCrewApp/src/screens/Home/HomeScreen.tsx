@@ -144,7 +144,7 @@ const HomeScreen = (navigation: any) => {
               return (
                 <View key={item.id} style={{ marginTop: '2%', flexDirection: 'column' }}>
                   <View style={{ width: 200, height: 220, alignItems: 'center', marginRight: '2%', backgroundColor: 'red' }}>
-                    <Image source={require('../../assets/img/WorkShops/ws1.png')} style={{ width: 200, height: 160 }} />
+                    <Image source={require('../../../assets/img/WorkShops/ws1.png')} style={{ width: 200, height: 160 }} />
                     <View style={{ width: 200, height: 60, backgroundColor: '#291D7D', justifyContent: 'center' }}>
                       <Text style={{ color: 'white', textAlign: 'center', fontFamily: 'Poppins-SemiBold', fontSize: 16 }}>{item.data.workshopName}</Text>
                       <Text style={{ color: '#FFA500', textAlign: 'center', fontFamily: 'Poppins-Medium', fontSize: 16 }}>{item.data.address}</Text>

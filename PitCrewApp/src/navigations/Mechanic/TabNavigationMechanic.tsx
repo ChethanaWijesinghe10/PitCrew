@@ -1,13 +1,13 @@
 import { View, Text, Image } from 'react-native'
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeScreen from '../screens/HomeScreen';
+import HomeScreen from '../../screens/Home/HomeScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { Icon } from '@rneui/base';
 import SparePartsNavigatorMec from './SparePartsNavigatorMec';
 import WorkshopProfileNavigation from './WorkshopNavigation';
-import RequestScreen from '../screens/RequestScreen';
-import WorkshopList from '../screens/WorkshopList';
+import RequestScreen from '../../screens/RequestScreen';
+import WorkshopList from '../../screens/Workshop/WorkshopList';
 
 
 const Tab = createBottomTabNavigator();
@@ -36,7 +36,7 @@ const TabNavigationMechanic = () => {
                 )}} />
                 <Tab.Screen name="Workshops" component={WorkshopList} options={{tabBarIcon: ({focused}) => (
                     <View style={{alignItems: 'center', justifyContent: 'center', marginLeft: '5%'}} >
-                        <Image style={{width: 38, height: 38,}} source={focused? require('../../assets/img/Icons/workshopActive.png') : require('../../assets/img/Icons/workshop.png')} />
+                        <Image style={{width: 38, height: 38,}} source={focused? require('../../../assets/img/Icons/workshopActive.png') : require('../../../assets/img/Icons/workshop.png')} />
                         <Text style={{color: focused? '#ED1C24' : '#707477', fontFamily: 'Poppins-Medium'}}>Workshop</Text>
                     </View>
                 )}} />

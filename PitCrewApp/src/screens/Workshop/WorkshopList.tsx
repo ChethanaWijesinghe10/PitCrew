@@ -3,7 +3,7 @@ import { View, Text, Image, FlatList, TouchableOpacity, Alert, Linking, StyleShe
 import firestore from '@react-native-firebase/firestore';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const WorkshopListAdmin = () => {
+const WorkshopList = () => {
   const [workshops, setWorkshops] = useState<{ id: string }[]>([]);
 
   useEffect(() => {
@@ -20,25 +20,6 @@ const WorkshopListAdmin = () => {
     return () => unsubscribe();
   }, []);
 
-  const deleteWorkshop = (id: string | undefined) => {
-    Alert.alert('Delete Workshop', 'Are you sure you want to delete this workshop!', [
-        {
-          text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        {text: 'OK', onPress: () => {
-            firestore()
-      .collection('Mechanics')
-      .doc(id)
-      .delete()
-      .then(() => {
-        Alert.alert('Workshop deleted!', 'The workshop has been successfully deleted.');
-      });
-        }},
-      ]);
-  };
-
   const openMap = (address: string | number | boolean) => {
     const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
     Linking.openURL(url).catch(err => console.error('An error occurred', err));
@@ -46,20 +27,16 @@ const WorkshopListAdmin = () => {
 
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
-      <Image source={require('../../assets/img/WorkShops/ws1.png')} style={styles.image} />
+      <Image source={require('../../../assets/img/WorkShops/ws1.png')} style={styles.image} />
       <View style={styles.detailsContainer}>
         <Text style={styles.title}>{item.workshopName}</Text>
         <Text style={styles.subtitle}>{item.specificArea}</Text>
         <Text style={styles.description}>{item.description}</Text>
         <Text style={styles.address}>{item.address}</Text>
         <View style={styles.iconsContainer}>
-          <TouchableOpacity onPress={() => deleteWorkshop(item.id)} style={{ flexDirection: 'row', flex: 1, alignContent: 'center', alignItems: 'center'}}>
-            <Icon name="delete" size={30} color="#ff0000" />
-            <Text>Delete</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => openMap(item.address)} style={{ flexDirection: 'row', flex: 1, alignContent: 'center', alignItems: 'center', justifyContent: 'flex-end' }}>
+          <TouchableOpacity onPress={() => openMap(item.address)} style={{ flexDirection: 'row', flex: 1, alignContent: 'center', alignItems: 'center' }}>
+            <Text style={{paddingRight: 30 }} >View Location</Text>
             <Icon name="map" size={30} color="#4285F4" />
-            <Text>View Location</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -68,9 +45,6 @@ const WorkshopListAdmin = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Workshop List</Text>
-      </View>
       <FlatList
         data={workshops}
         renderItem={renderItem}
@@ -84,6 +58,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5F5F5',
+    marginTop: '8%'
   },
   header: {
     backgroundColor: '#11046E',
@@ -142,4 +117,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WorkshopListAdmin;
+export default WorkshopList;

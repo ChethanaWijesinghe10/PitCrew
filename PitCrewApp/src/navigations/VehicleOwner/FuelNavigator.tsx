@@ -1,15 +1,15 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import NewReportScreen from '../screens/Fuel/NewReportScreen';
-import FuelHome from '../screens/Fuel/FuelHome';
-import FuelLastEvents from '../screens/Fuel/FuelLastEvents';
-import ReminderListScreen from '../screens/Fuel/RemainderListScreen';
-import NewRemainderScreen from '../screens/Fuel/NewRemainderScreen';
-import ViewRemainderScreen from '../screens/Fuel/ViewRemainderScreen';
-import EditRecordScreen from '../screens/Fuel/EditRecordScreen';
-import ViewRecordScreen from '../screens/Fuel/ViewRecordScreen';
-import EditRemainderScreen from '../screens/Fuel/EditRemainderScreen';
+import NewReportScreen from '../../screens/Fuel/NewReportScreen';
+import FuelHome from '../../screens/Fuel/FuelHome';
+import FuelLastEvents from '../../screens/Fuel/FuelLastEvents';
+import ReminderListScreen from '../../screens/Fuel/RemainderListScreen';
+import NewRemainderScreen from '../../screens/Fuel/NewRemainderScreen';
+import ViewRemainderScreen from '../../screens/Fuel/ViewRemainderScreen';
+import EditRecordScreen from '../../screens/Fuel/EditRecordScreen';
+import ViewRecordScreen from '../../screens/Fuel/ViewRecordScreen';
+import EditRemainderScreen from '../../screens/Fuel/EditRemainderScreen';
 
 const FuelNavigator = () => {
 

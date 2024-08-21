@@ -125,10 +125,6 @@ const ChatBotScreen: React.FC = () => {
     });
     setSelectedCategory(null);
   };
-  const handleBackButtonPress = () => {
-    setMessages([]);
-    setModalVisible(false);
-  };
 
   const handleCategorySelect = (category: string) => {
     setSelectedCategory(category);
@@ -137,9 +133,6 @@ const ChatBotScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={handleBackButtonPress} style={styles.backButton}>
-          <Icon name="arrow-back" size={24} color="#fff" />
-        </TouchableOpacity>
         <Text style={styles.title}>PitCrew Chat Assistent</Text>
         <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.questionButton}>
           <Icon name="help-circle" size={24} color="#fff" />
@@ -195,7 +188,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#11046E',
+    backgroundColor: '#291D7D',
     height: 60,
     paddingHorizontal: 15,
   },

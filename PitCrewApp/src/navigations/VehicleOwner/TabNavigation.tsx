@@ -1,13 +1,13 @@
 import { View, Text, Image, StyleSheet } from 'react-native'
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeScreen from '../screens/HomeScreen';
+import HomeScreen from '../../screens/Home/HomeScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { Icon } from '@rneui/base';
 import SparePartsNavigator from './SparePartsNavigator';
 import UserProfileNavigation from './UserProfileNavigation';
-import WorkshopList from '../screens/WorkshopList';
-import RequestScreen from '../screens/RequestScreen';
+import WorkshopList from '../../screens/Workshop/WorkshopList';
+import RequestScreen from '../../screens/RequestScreen';
 
 
 const Tab = createBottomTabNavigator();
@@ -36,7 +36,7 @@ const TabNavigation = () => {
                 )}} />
                 <Tab.Screen name="Workshops" component={WorkshopList} options={{tabBarIcon: ({focused}) => (
                     <View style={styles.iconContainer} >
-                        <Image style={{width: 35, height: 35,}} source={focused? require('../../assets/img/Icons/workshopActive.png') : require('../../assets/img/Icons/workshop.png')} />
+                        <Image style={{width: 35, height: 35,}} source={focused? require('../../../assets/img/Icons/workshopActive.png') : require('../../../assets/img/Icons/workshop.png')} />
                         <Text style={[styles.iconText, {color: focused? '#ED1C24' : '#707477'},]}>Workshop</Text>
                     </View>
                 )}} />

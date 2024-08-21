@@ -2,11 +2,11 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, StackNavigationOptions } from '@react-navigation/stack';
-import Items from '../screens/SpareParts/Mechanic/Items';
-import EditItem from '../screens/SpareParts/Mechanic/EditItem';
-import Add from '../screens/SpareParts/Mechanic/Add';
-import MechanicFunctions from '../screens/SpareParts/Mechanic/MechanicFunctions';
-import ProductList from '../screens/SpareParts/VehicleOwner/ProductList';
+import Items from '../../screens/SpareParts/Mechanic/Items';
+import EditItem from '../../screens/SpareParts/Mechanic/EditItem';
+import Add from '../../screens/SpareParts/Mechanic/Add';
+import MechanicFunctions from '../../screens/SpareParts/Mechanic/MechanicFunctions';
+import ProductList from '../../screens/SpareParts/VehicleOwner/ProductList';
 
 export type RootStackParamList = {
   Splash: undefined;

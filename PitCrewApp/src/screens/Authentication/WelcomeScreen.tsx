@@ -2,7 +2,7 @@ import { View, Text, StatusBar, Image, TouchableOpacity } from 'react-native'
 import React, { useEffect } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LinearGradient from 'react-native-linear-gradient';
-import { sty } from '../styles/Styles';
+import { sty } from '../../styles/Styles';
 
 const WelcomeScreen = (props:any) => {
 
@@ -26,7 +26,7 @@ const WelcomeScreen = (props:any) => {
         >
             <View style={sty.WelcomeContainer}>
                 <StatusBar backgroundColor={'#472EFF'} />
-                <Image style={{ alignSelf: 'center', marginTop: '8%' }} source={require('../../assets/img/welcomPic.png')} />
+                <Image style={{ alignSelf: 'center', marginTop: '8%' }} source={require('../../../assets/img/welcomPic.png')} />
                 <Text style={{ color: 'white', fontSize: 32, marginLeft: '7%', fontFamily: 'Poppins-Medium', fontWeight: '500', marginTop: '-5%' }}>WELCOME</Text>
                 <Text style={{ color: 'white', fontSize: 20, marginLeft: '7%', fontFamily: 'Poppins-ExtraLight', fontWeight: '200', marginTop: '-3%' }}>Let's Get started</Text>
 

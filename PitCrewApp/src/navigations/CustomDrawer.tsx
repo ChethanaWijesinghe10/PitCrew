@@ -2,9 +2,7 @@ import { View, Text, Image, TouchableOpacity, Alert, BackHandler } from 'react-n
 import React, { useEffect, useState } from 'react'
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useNavigation } from '@react-navigation/native'
-import SigninScreen from '../screens/SigninScreen'
 import { firebase } from '../../firebase/firebaseConfig'
 import '@react-native-firebase/auth';
 

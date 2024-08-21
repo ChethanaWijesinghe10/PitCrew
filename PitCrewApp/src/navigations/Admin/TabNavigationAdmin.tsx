@@ -3,11 +3,11 @@ import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { Icon } from '@rneui/base';
-import WorkshopListAdmin from '../screens/WorshopListAdmin';
-import UsersListAdmin from '../screens/UsersListAdmin';
+import WorkshopListAdmin from '../../screens/Workshop/WorshopListAdmin';
+import UsersListAdmin from '../../screens/UsersListAdmin';
 import AdminProfileNavigation from './AdminProfileNavigation';
-import HomeAdmin from '../screens/HomeAdmin';
-import ItemsAdmin from '../screens/SpareParts/Admin/ItemsAdmin';
+import HomeAdmin from '../../screens/Home/HomeAdmin';
+import ItemsAdmin from '../../screens/SpareParts/Admin/ItemsAdmin';
 
 
 const Tab = createBottomTabNavigator();
@@ -36,7 +36,7 @@ const TabNavigationAdmin = () => {
                 )}} />
                 <Tab.Screen name="Workshops" component={WorkshopListAdmin} options={{tabBarIcon: ({focused}) => (
                     <View style={styles.iconContainer} >
-                        <Image style={{width: 35, height: 35,}} source={focused? require('../../assets/img/Icons/workshopActive.png') : require('../../assets/img/Icons/workshop.png')} />
+                        <Image style={{width: 35, height: 35,}} source={focused? require('../../../assets/img/Icons/workshopActive.png') : require('../../../assets/img/Icons/workshop.png')} />
                         <Text style={[styles.iconText, {color: focused? '#ED1C24' : '#707477'},]}>Workshop</Text>
                     </View>
                 )}} />

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StatusBar, Image, TouchableOpacity } from 'react-native';
-import { sty } from '../styles/Styles'; 
+import { sty } from '../../styles/Styles'; 
 import { Dropdown } from 'react-native-element-dropdown';
 import { Appbar, Button } from 'react-native-paper';
 
@@ -40,7 +40,7 @@ const SignupWelcomeScreen = (props: any) => {
         <Text style={sty.BackWord}>Back</Text>
       </Appbar.Header>
 
-      <Image source={require('../../assets/img/logoWhite.jpg')} style={{ alignSelf: 'center', width: 150, height: 150 }} />
+      <Image source={require('../../../assets/img/logoWhite.jpg')} style={{ alignSelf: 'center', width: 150, height: 150 }} />
       <Text style={{
         fontFamily: 'Poppins-SemiBold',
         fontSize: 32,

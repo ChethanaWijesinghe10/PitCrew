@@ -4,7 +4,7 @@ import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused, useNavigation, NavigationProp } from '@react-navigation/native';
 import Header from '../common/Header';
-import { RootStackParamList } from '../../../navigations/SparePartsNavigator';
+import { RootStackParamList } from '../../../navigations/VehicleOwner/SparePartsNavigator';
 
 interface Item {
   id: string;
