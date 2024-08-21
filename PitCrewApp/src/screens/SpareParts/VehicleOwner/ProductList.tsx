@@ -5,7 +5,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused, useNavigation, NavigationProp } from '@react-navigation/native';
 import Header from '../common/Header';
 import { RootStackParamList } from '../../../navigations/SparePartsNavigator';
-import { Appbar } from 'react-native-paper';
 
 interface Item {
   id: string;

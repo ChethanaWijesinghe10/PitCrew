@@ -151,10 +151,12 @@ function SignInSection() {
 
                 const vehicleOwnerRef = firebase.firestore().collection('VehicleOwners').doc(uid);
                 const mechanicRef = firebase.firestore().collection('Mechanics').doc(uid);
+                const adminRef = firebase.firestore().collection('Admin').doc(uid);
 
                 try {
                     const vehicleOwnerSnapshot = await vehicleOwnerRef.get();
                     const mechanicSnapshot = await mechanicRef.get();
+                    const adminSnapshot = await adminRef.get();
 
                     if (vehicleOwnerSnapshot.exists) {
                         setIsLogging(false);
@@ -173,6 +175,13 @@ function SignInSection() {
                         console.log(userType);
                         nav.navigate('HomeMec');
                         return;
+                    } else if (adminSnapshot.exists) {
+                        setIsLogging(false);
+                        console.log('Navigate to Admin Home');
+                        setUserType('Admin');
+                        AsyncStorage.setItem('USERID', uid);
+                        console.log(userType);
+                        nav.navigate('HomeAdmin');
                     } else {
                         console.error('User not found in either collection');
                         Alert.alert('Error', 'User not found. Please contact support.');

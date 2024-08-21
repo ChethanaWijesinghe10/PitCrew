@@ -45,14 +45,6 @@ const SparePartsNavigatorMec: React.FC = () => {
         <Stack.Screen name="EditItem" component={EditItem} />
         <Stack.Screen name="Add" component={Add} />
         <Stack.Screen name="ProductList" component={ProductList} options={{ headerShown: false }} />
-        {/* <Stack.Screen name="UserLogin" component={UserLogin} />
-        <Stack.Screen name="UserSignup" component={UserSignup} options={{ headerShown: false }} />
-        <Stack.Screen name="ProductList" component={ProductList} options={{ headerShown: false }} />
-        <Stack.Screen name="Cart" component={Cart} options={{ headerShown: false }} />
-        <Stack.Screen name="Checkout" component={Checkout} options={{ headerShown: false }} />
-        <Stack.Screen name="Address" component={Address} options={{ headerShown: false }} />
-        <Stack.Screen name="AddNewAddress" component={AddNewAddress} options={{ headerShown: false }} />
-        <Stack.Screen name="OrderStatus" component={OrderStatus} options={{ headerShown: false }} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -8,6 +8,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import TabNavigationMechanic from './TabNavigationMechanic';
 import { Icon } from '@rneui/base';
 import FuelNavigator from './FuelNavigator';
+import ContactUsScreen from '../screens/ContactUsScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -41,6 +42,15 @@ const DrawerNavigationMechanic = (props: any) => {
           drawerItemStyle: {marginTop: 20}, 
           drawerIcon: ({color}) => {
           return <Icon name="gas-station" type='material-community' size={22} color={color} style={{marginLeft: 5}} />;
+        }, }}/>
+        <Drawer.Screen name="Contact Us" component={ContactUsScreen} 
+        options={{ 
+          headerTitle: 'Contact Us',
+          headerTitleAlign:'center', 
+          headerTitleStyle: {fontSize: 23 }, 
+          drawerItemStyle: {marginTop: 20}, 
+          drawerIcon: ({color}) => {
+          return <Icon name="message" type='material' size={22} color={color} style={{marginLeft: 5}} />;
         }, }}/>
       </Drawer.Navigator>
     </NavigationContainer>

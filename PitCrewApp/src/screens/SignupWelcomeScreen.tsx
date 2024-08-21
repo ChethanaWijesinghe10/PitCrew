@@ -17,6 +17,7 @@ const SignupWelcomeScreen = (props: any) => {
   const dropdownItems = [
     { label: 'Vehicle Owner', value: 'VOwner' },
     { label: 'Mechanic', value: 'Mechanic' },
+    { label: 'Admin', value: 'Admin' },
   ];
 
   function handleNavigation() {
@@ -24,6 +25,8 @@ const SignupWelcomeScreen = (props: any) => {
       stack.navigate('SignUpUser');
     } else if (selectedValue === 'Mechanic') {
       stack.navigate('SignUpMec');
+    } else if (selectedValue === 'Admin') {
+      stack.navigate('SignUpAdmin')
     }
   }
 

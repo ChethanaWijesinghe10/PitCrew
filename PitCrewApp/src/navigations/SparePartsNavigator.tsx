@@ -37,7 +37,7 @@ const screenOptions: StackNavigationOptions = {
   headerShown: false,
 };
 
-const SparePartsNavigatorMec: React.FC = () => {
+const SparePartsNavigator: React.FC = () => {
   return (
     <NavigationContainer independent={true} >
       <Stack.Navigator screenOptions={screenOptions}>
@@ -52,5 +52,5 @@ const SparePartsNavigatorMec: React.FC = () => {
   );
 };
 
-export default SparePartsNavigatorMec;
+export default SparePartsNavigator;
 
