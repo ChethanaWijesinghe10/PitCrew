@@ -93,7 +93,7 @@ const FuelLastEvents = (props: any) => {
 
                 <ScrollView>
                     <View style={{ flexDirection: 'row', marginTop: '5%', marginBottom: '5%' }} >
-                    <SegmentedPicker width={60} title={'All'} onPress={() => setSelectedCategory(null)} />
+                        <SegmentedPicker width={60} title={'All'} onPress={() => setSelectedCategory(null)} />
                         <SegmentedPicker width={70} title={'Fuel'} onPress={() => setSelectedCategory('Fuel')} />
                         <SegmentedPicker width={100} title={'Insurance'} onPress={() => setSelectedCategory('Insurance')} />
                         <SegmentedPicker width={100} title={'Service'} onPress={() => setSelectedCategory('Service')} />

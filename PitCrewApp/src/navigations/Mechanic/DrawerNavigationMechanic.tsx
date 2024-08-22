@@ -9,6 +9,7 @@ import TabNavigationMechanic from './TabNavigationMechanic';
 import { Icon } from '@rneui/base';
 import FuelNavigator from '../VehicleOwner/FuelNavigator';
 import ContactUsScreen from '../../screens/ContactUsScreen';
+import ChatBotScreen from '../../screens/ChatBotScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -42,6 +43,15 @@ const DrawerNavigationMechanic = (props: any) => {
           drawerItemStyle: {marginTop: 20}, 
           drawerIcon: ({color}) => {
           return <Icon name="gas-station" type='material-community' size={22} color={color} style={{marginLeft: 5}} />;
+        }, }}/>
+        <Drawer.Screen name="Chat Bot" component={ChatBotScreen} 
+        options={{ 
+          headerTitle: 'ChatBot',
+          headerTitleAlign:'center', 
+          headerTitleStyle: {fontSize: 23 }, 
+          drawerItemStyle: {marginTop: 20}, 
+          drawerIcon: ({color}) => {
+          return <Icon name="robot" type='font-awesome-5' size={22} color={color} style={{marginLeft: 5}} />;
         }, }}/>
         <Drawer.Screen name="Contact Us" component={ContactUsScreen} 
         options={{ 

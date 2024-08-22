@@ -50,7 +50,7 @@ const DrawerNavigation = (props: any) => {
           headerTitleStyle: {fontSize: 23 }, 
           drawerItemStyle: {marginTop: 20}, 
           drawerIcon: ({color}) => {
-          return <Icon name="gas-station" type='material-community' size={22} color={color} style={{marginLeft: 5}} />;
+          return <Icon name="robot" type='font-awesome-5' size={22} color={color} style={{marginLeft: 5}} />;
         }, }}/>
         <Drawer.Screen name="Contact Us" component={ContactUsScreen} 
         options={{ 

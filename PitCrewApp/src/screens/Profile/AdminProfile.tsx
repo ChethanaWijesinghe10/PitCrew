@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image, Alert } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image, Alert, BackHandler } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -14,32 +14,73 @@ const AdminProfile: React.FC = () => {
 
     const [userName, setUserName] = useState('');
     const [email, setEmail] = useState('');
+    const [user, setUser] = useState<firebase.User | null>(null);
 
     useEffect(() => {
-        const fetchData = async () => {
-            const userId = await AsyncStorage.getItem('USERID');
-            console.log(userId);
-            try {
-                if (userId) {
-                    const user = await firebase.firestore().collection('Admin').doc(userId).get();
+        fetchData();
+        unsubscribe();
+    }, []);
 
-                    if (user.exists) {
-                        const data = user.data();
-                        if (data) {
-                            setUserName(data.name || '');
-                            setEmail(data.email || '');
+    const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+            setUser(user);
+        } else {
+            setUser(null);
+        }
+    });
+
+    const fetchData = async () => {
+        const userId = await AsyncStorage.getItem('USERID');
+        console.log(userId);
+        try {
+            if (userId) {
+                const user = await firebase.firestore().collection('Admin').doc(userId).get();
+
+                if (user.exists) {
+                    const data = user.data();
+                    if (data) {
+                        setUserName(data.name || '');
+                        setEmail(data.email || '');
+                    }
+                } else {
+                    console.log('No such document!');
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching document: ', error);
+        }
+    };
+
+    const logout = () => {
+
+        Alert.alert(
+            "Confirm Sign Out",
+            "Are you sure you want to sign out?",
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => console.log("Sign out cancelled"),
+                    style: "cancel"
+                },
+                {
+                    text: "Sign Out",
+                    onPress: () => {
+                        // Implement your sign-out logic here
+                        if (user) {
+                            firebase.auth().signOut();
+                            navigation.navigate('signIn')
+
+                        } else {
+                            console.log('No user is logged in');
                         }
-                    } else {
-                        console.log('No such document!');
+                        
+                        console.log("User signed out");
+                        // You can navigate to a sign-in screen or reset navigation stack
                     }
                 }
-            } catch (error) {
-                console.error('Error fetching document: ', error);
-            }
-        };
-
-        fetchData();
-    }, []);
+            ]
+        );
+    }
 
     return (
         <SafeAreaView>
@@ -84,6 +125,21 @@ const AdminProfile: React.FC = () => {
                                         fontWeight: 'bold',
                                         fontSize: 16,
                                     }} >Edit</Text>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity activeOpacity={0.5} onPress={logout} >
+                                <View style={{
+                                    backgroundColor: 'red',
+                                    padding: 15,
+                                    borderRadius: 10,
+                                    marginTop: 20,
+                                    alignItems: 'center',
+                                }}>
+                                    <Text style={{
+                                        color: '#fff',
+                                        fontWeight: 'bold',
+                                        fontSize: 16,
+                                    }} >Logout</Text>
                                 </View>
                             </TouchableOpacity>
                         </View>
