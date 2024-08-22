@@ -131,8 +131,8 @@ const Cart: React.FC<CartProps> = ({ navigation }) => {
                 </TouchableOpacity>
               </View>
               <View style={styles.priceView}>
-                <Text style={styles.priceText}>{'$' + item.data.discountPrice}</Text>
-                <Text style={styles.discountText}>{'$' + item.data.price}</Text>
+                <Text style={styles.priceText}>{'Rs.' + item.data.discountPrice}</Text>
+                <Text style={styles.discountText}>{'Rs.' + item.data.price}</Text>
               </View>
             </View>
           </View>
