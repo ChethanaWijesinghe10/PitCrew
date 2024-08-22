@@ -99,7 +99,7 @@ const HomeAdmin = (navigation: any) => {
 
                 <Appbar.Header style={{ backgroundColor: '#11046E' }}>
                     <Appbar.Action icon={'menu'} color='#11046E' />
-                    <Appbar.Content title='PitCrew' color='white' style={{ alignItems: 'center', }} />
+                    <Appbar.Content title='PitCrew Admin' color='white' style={{ alignItems: 'center', }} />
                     <Appbar.Action icon={'cart'} color='#11046E' />
                 </Appbar.Header>
 
