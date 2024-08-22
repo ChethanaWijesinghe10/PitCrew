@@ -7,6 +7,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Dropdown } from 'react-native-element-dropdown'
 import firebase from 'firebase/compat/app'
 import { useNavigation } from '@react-navigation/native'
+import { Icon } from '@rneui/base'
 
 const SignUpMechanic = (Props: any) => {
 
@@ -62,6 +63,7 @@ function SignUpSection(p: any) {
         { label: 'Auto Electrician', value: 'Auto Electrician' },
         { label: 'Heavy Vehicle Mechanic', value: 'Heavy Vehicle Mechanic' },
         { label: 'Tire Mechanic', value: 'Tire Mechanic' },
+        { label: 'Car Wash', value: 'Car Wash' },
     ];
 
     const [email, setEmail] = useState('');
@@ -74,6 +76,8 @@ function SignUpSection(p: any) {
     const [address, setAddress] = useState('');
     const [workingCity, setWorkingCity] = useState('');
     const [specificArea, setSpecificArea] = useState('');
+    const [hidePass, setHidePass] = useState(true);
+    const [hideConPass, setHideConPass] = useState(true);
 
     const onPressRegister = async (p: any) => {
 
@@ -82,37 +86,43 @@ function SignUpSection(p: any) {
             Alert.alert('Warning!', 'Passwords do not match.')
             return;
         }
-        try {
-            const response = await firebase.auth().createUserWithEmailAndPassword(email, password);
+        if (email && password && confirmPassword && contactNo && nic && workshopName && ownerName && address && workingCity && specificArea) {
 
-            if (response.user) {
-                const uid = response.user.uid;
-                const data = {
-                    id: uid,
-                    email,
-                    contactNo,
-                    nic,
-                    workshopName,
-                    ownerName,
-                    address,
-                    workingCity,
-                    specificArea,
 
-                };
+            try {
+                const response = await firebase.auth().createUserWithEmailAndPassword(email, password);
 
-                const usersRef = firebase.firestore().collection('Mechanics').doc(uid) 
-                await usersRef.set(data);
+                if (response.user) {
+                    const uid = response.user.uid;
+                    const data = {
+                        id: uid,
+                        email,
+                        contactNo,
+                        nic,
+                        workshopName,
+                        ownerName,
+                        address,
+                        workingCity,
+                        specificArea,
 
-                await firebase.auth().currentUser?.sendEmailVerification();
-                Alert.alert("Success", "User created successfully! \nPlease verify your email address to proceed.");
-                nav.navigate('SignIn');
-            } else {
-                console.error('User object not available in response');
-                Alert.alert('Error', 'An unexpected error occurred during registration.')
+                    };
+
+                    const usersRef = firebase.firestore().collection('Mechanics').doc(uid)
+                    await usersRef.set(data);
+
+                    await firebase.auth().currentUser?.sendEmailVerification();
+                    Alert.alert("Success", "User created successfully! \nPlease verify your email address to proceed.");
+                    nav.navigate('SignIn');
+                } else {
+                    console.error('User object not available in response');
+                    Alert.alert('Error', 'An unexpected error occurred during registration.')
+                }
+            } catch (error: any) {
+                console.log(error);
+                Alert.alert('Error', error.message);
             }
-        } catch (error: any) {
-            console.log(error);
-            Alert.alert('Error', error.message);
+        } else {
+            Alert.alert('Error', 'Enter all details')
         }
     }
 
@@ -121,78 +131,94 @@ function SignUpSection(p: any) {
         <View>
             <View style={{ marginTop: '6%' }}>
                 <View style={sty.TextInputField}>
-                    <TextInput  
-                    onChangeText={(text) => setEmail(text)} 
-                    placeholder='Email Address' 
-                    placeholderTextColor={'#B3B3B6'} 
-                    keyboardType='email-address'
-                    autoCapitalize='none'
-                    style={{ marginHorizontal: '5%', color: 'black' }} />
+                    <TextInput
+                        onChangeText={(text) => setEmail(text)}
+                        placeholder='Email Address'
+                        placeholderTextColor={'#B3B3B6'}
+                        keyboardType='email-address'
+                        autoCapitalize='none'
+                        style={{ marginHorizontal: '5%', color: 'black' }} />
+                </View>
+                <View style={[sty.TextInputField, { flexDirection: 'row', alignItems: 'center' }]}>
+                    <TextInput
+                        onChangeText={(text) => setPassword(text)}
+                        placeholder='Password'
+                        placeholderTextColor={'#B3B3B6'}
+                        secureTextEntry={hidePass}
+                        style={{ flex: 1, marginHorizontal: '5%', color: 'black' }}
+                    />
+                    <Icon
+                        name={hidePass ? 'eye-slash' : 'eye'}
+                        type='font-awesome-5'
+                        size={18}
+                        onPress={() => setHidePass(!hidePass)}
+                        style={{ marginRight: '5%' }}
+                    />
+                </View>
+                <View style={[sty.TextInputField, { flexDirection: 'row', alignItems: 'center' }]}>
+                    <TextInput
+                        onChangeText={(text) => setConfirmPassword(text)}
+                        placeholder='Confirm Password'
+                        placeholderTextColor={'#B3B3B6'}
+                        secureTextEntry={hideConPass}
+                        style={{ flex: 1, marginHorizontal: '5%', color: 'black' }}
+                    />
+                    <Icon
+                        name={hideConPass ? 'eye-slash' : 'eye'}
+                        type='font-awesome-5'
+                        size={18}
+                        onPress={() => setHideConPass(!hideConPass)}
+                        style={{ marginRight: '5%' }}
+                    />
                 </View>
                 <View style={sty.TextInputField}>
-                    <TextInput 
-                    onChangeText={(text) => setPassword(text)} 
-                    placeholder='Password' 
-                    placeholderTextColor={'#B3B3B6'} 
-                    secureTextEntry={true} 
-                    style={{ marginHorizontal: '5%', color: 'black' }} />
+                    <TextInput
+                        keyboardType='numeric'
+                        maxLength={10}
+                        onChangeText={(text) => setContactNo(text)}
+                        placeholder='Contact No'
+                        placeholderTextColor={'#B3B3B6'}
+                        style={{ marginHorizontal: '5%', color: 'black' }} />
                 </View>
                 <View style={sty.TextInputField}>
-                    <TextInput 
-                    onChangeText={(text) => setConfirmPassword(text)} 
-                    placeholder='Confirm Password' 
-                    placeholderTextColor={'#B3B3B6'} 
-                    secureTextEntry={true} 
-                    style={{ marginHorizontal: '5%', color: 'black' }} />
+                    <TextInput
+                        onChangeText={(text) => setNic(text)}
+                        placeholder='NIC'
+                        placeholderTextColor={'#B3B3B6'}
+                        style={{ marginHorizontal: '5%', color: 'black' }} />
                 </View>
                 <View style={sty.TextInputField}>
-                    <TextInput 
-                    keyboardType='numeric' 
-                    maxLength={10} 
-                    onChangeText={(text) => setContactNo(text)} 
-                    placeholder='Contact No' 
-                    placeholderTextColor={'#B3B3B6'} 
-                    style={{ marginHorizontal: '5%', color: 'black' }} />
+                    <TextInput
+                        onChangeText={(text) => setWorkshopName(text)}
+                        placeholder='Workshop Name'
+                        placeholderTextColor={'#B3B3B6'}
+                        autoCapitalize='sentences'
+                        style={{ marginHorizontal: '5%', color: 'black' }} />
                 </View>
                 <View style={sty.TextInputField}>
-                    <TextInput 
-                    onChangeText={(text) => setNic(text)} 
-                    placeholder='NIC' 
-                    placeholderTextColor={'#B3B3B6'} 
-                    style={{ marginHorizontal: '5%', color: 'black' }} />
+                    <TextInput
+                        onChangeText={(text) => setOwnerName(text)}
+                        placeholder="Owner's Name"
+                        placeholderTextColor={'#B3B3B6'}
+                        autoCapitalize='sentences'
+                        style={{ marginHorizontal: '5%', color: 'black' }} />
                 </View>
                 <View style={sty.TextInputField}>
-                    <TextInput 
-                    onChangeText={(text) => setWorkshopName(text)} 
-                    placeholder='Workshop Name' 
-                    placeholderTextColor={'#B3B3B6'}
-                    autoCapitalize='sentences' 
-                    style={{ marginHorizontal: '5%', color: 'black' }} />
+                    <TextInput
+                        multiline
+                        onChangeText={(text) => setAddress(text)}
+                        placeholder='Address'
+                        placeholderTextColor={'#B3B3B6'}
+                        autoCapitalize='sentences'
+                        style={{ marginHorizontal: '5%', color: 'black' }} />
                 </View>
                 <View style={sty.TextInputField}>
-                    <TextInput 
-                    onChangeText={(text) => setOwnerName(text)} 
-                    placeholder="Owner's Name" 
-                    placeholderTextColor={'#B3B3B6'}
-                    autoCapitalize='sentences' 
-                    style={{ marginHorizontal: '5%', color: 'black' }} />
-                </View>
-                <View style={sty.TextInputField}>
-                    <TextInput 
-                    multiline 
-                    onChangeText={(text) => setAddress(text)} 
-                    placeholder='Address' 
-                    placeholderTextColor={'#B3B3B6'} 
-                    autoCapitalize='sentences'
-                    style={{ marginHorizontal: '5%', color: 'black' }} />
-                </View>
-                <View style={sty.TextInputField}>
-                    <TextInput 
-                    onChangeText={(text) => setWorkingCity(text)} 
-                    placeholder='Working City' 
-                    placeholderTextColor={'#B3B3B6'} 
-                    autoCapitalize='sentences'
-                    style={{ marginHorizontal: '5%', color: 'black' }} />
+                    <TextInput
+                        onChangeText={(text) => setWorkingCity(text)}
+                        placeholder='Working City'
+                        placeholderTextColor={'#B3B3B6'}
+                        autoCapitalize='sentences'
+                        style={{ marginHorizontal: '5%', color: 'black' }} />
                 </View>
                 <View style={[sty.TextInputField, { marginTop: '5%' }]}>
                     <Dropdown

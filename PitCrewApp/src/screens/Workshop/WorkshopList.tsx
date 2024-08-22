@@ -63,6 +63,7 @@ const WorkshopList = () => {
         <SegmentedPicker width={175} title={'Auto Electrician'} onPress={() => setSelectedCategory('Auto Electrician')} />
         <SegmentedPicker width={175} title={'Heavy Vehicle Mechanic'} onPress={() => setSelectedCategory('Heavy Vehicle Mechanic')} />
         <SegmentedPicker width={175} title={'Tire Mechanic'} onPress={() => setSelectedCategory('Tire Mechanic')} />
+        <SegmentedPicker width={175} title={'Car Wash'} onPress={() => setSelectedCategory('Car Wash')} />
       </View>
       <FlatList
         data={workshops}

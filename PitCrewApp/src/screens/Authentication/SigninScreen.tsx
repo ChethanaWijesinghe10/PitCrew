@@ -5,12 +5,13 @@ import { ActivityIndicator, Appbar, Button } from 'react-native-paper'
 import { firebase, firebaseConfig } from '../../../firebase/firebaseConfig'
 import 'firebase/compat/auth';
 import { useNavigation } from '@react-navigation/native'
-import { GoogleSignin } from '@react-native-google-signin/google-signin'; 
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import { initializeApp } from 'firebase/app'
 import { useUserType } from '../../components/UserTypeContext'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Icon } from '@rneui/base'
 
 const SigninScreen = (props: any) => {
 
@@ -126,12 +127,13 @@ function SignInSection() {
 
     const nav: any = useNavigation();
 
-    const { userType,setUserType } = useUserType(); 
+    const { userType, setUserType } = useUserType();
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
     const [isLogging, setIsLogging] = useState(false);
+    const [hidePass, setHidePass] = useState(true);
 
     useEffect(() => {
         console.log('User Type:', userType); // Log userType whenever it changes
@@ -143,58 +145,61 @@ function SignInSection() {
     }
 
     const onLoginPress = async () => {
+        if (email && password) {
+            try {
+                const response = await firebase.auth().signInWithEmailAndPassword(email, password);
+                if (response.user) {
+                    const uid = response.user.uid;
 
-        try {
-            const response = await firebase.auth().signInWithEmailAndPassword(email, password);
-            if (response.user) {
-                const uid = response.user.uid;
+                    const vehicleOwnerRef = firebase.firestore().collection('VehicleOwners').doc(uid);
+                    const mechanicRef = firebase.firestore().collection('Mechanics').doc(uid);
+                    const adminRef = firebase.firestore().collection('Admin').doc(uid);
 
-                const vehicleOwnerRef = firebase.firestore().collection('VehicleOwners').doc(uid);
-                const mechanicRef = firebase.firestore().collection('Mechanics').doc(uid);
-                const adminRef = firebase.firestore().collection('Admin').doc(uid);
+                    try {
+                        const vehicleOwnerSnapshot = await vehicleOwnerRef.get();
+                        const mechanicSnapshot = await mechanicRef.get();
+                        const adminSnapshot = await adminRef.get();
 
-                try {
-                    const vehicleOwnerSnapshot = await vehicleOwnerRef.get();
-                    const mechanicSnapshot = await mechanicRef.get();
-                    const adminSnapshot = await adminRef.get();
+                        if (vehicleOwnerSnapshot.exists) {
+                            setIsLogging(false);
+                            console.log('Navigate to User Home');
+                            setUserType('VehicleOwner');
+                            AsyncStorage.setItem('USERID', uid);
+                            console.log(userType);
+                            nav.navigate('HomeUser');
 
-                    if (vehicleOwnerSnapshot.exists) {
-                        setIsLogging(false);
-                        console.log('Navigate to User Home');
-                        setUserType('VehicleOwner');
-                        AsyncStorage.setItem('USERID', uid);
-                        console.log(userType);
-                        nav.navigate('HomeUser');
-
-                        return;
-                    } else if (mechanicSnapshot.exists) {
-                        setIsLogging(false);
-                        console.log('Navigate to Mechanic Home');
-                        setUserType('Mechanic'); 
-                        AsyncStorage.setItem('USERID', uid);
-                        console.log(userType);
-                        nav.navigate('HomeMec');
-                        return;
-                    } else if (adminSnapshot.exists) {
-                        setIsLogging(false);
-                        console.log('Navigate to Admin Home');
-                        setUserType('Admin');
-                        AsyncStorage.setItem('USERID', uid);
-                        console.log(userType);
-                        nav.navigate('HomeAdmin');
-                    } else {
-                        console.error('User not found in either collection');
-                        Alert.alert('Error', 'User not found. Please contact support.');
+                            return;
+                        } else if (mechanicSnapshot.exists) {
+                            setIsLogging(false);
+                            console.log('Navigate to Mechanic Home');
+                            setUserType('Mechanic');
+                            AsyncStorage.setItem('USERID', uid);
+                            console.log(userType);
+                            nav.navigate('HomeMec');
+                            return;
+                        } else if (adminSnapshot.exists) {
+                            setIsLogging(false);
+                            console.log('Navigate to Admin Home');
+                            setUserType('Admin');
+                            AsyncStorage.setItem('USERID', uid);
+                            console.log(userType);
+                            nav.navigate('HomeAdmin');
+                        } else {
+                            console.error('User not found in either collection');
+                            Alert.alert('Error', 'User not found. Please contact support.');
+                        }
+                    } catch (error) {
+                        console.error(error);
+                        Alert.alert('Error', 'An error occurred while checking user type.');
                     }
-                } catch (error) {
-                    console.error(error);
-                    Alert.alert('Error', 'An error occurred while checking user type.');
                 }
+            } catch (error: any) {
+                setIsLogging(false);
+                console.log(error);
+                Alert.alert(error.message || 'An error occurred during login.');
             }
-        } catch (error: any) {
-            setIsLogging(false);
-            console.log(error);
-            Alert.alert(error.message || 'An error occurred during login.');
+        } else {
+            Alert.alert('Error', 'Enter email and password')
         }
     }
 
@@ -202,27 +207,33 @@ function SignInSection() {
 
         initializeApp(firebaseConfig);
 
-        if(email != null) {
-        const auth = getAuth();
-        sendPasswordResetEmail(auth, email)
-            .then(() => {
-                console.log('Password reset email sent!');
-            })
-            .catch((error:  any) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                Alert.alert("Error", errorMessage)
-                console.log(errorCode, errorMessage)
-                // ..
-            });
+        if (email != null) {
+            const auth = getAuth();
+            sendPasswordResetEmail(auth, email)
+                .then(() => {
+                    console.log('Password reset email sent!');
+                })
+                .catch((error: any) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    Alert.alert("Error", errorMessage)
+                    console.log(errorCode, errorMessage)
+                    // ..
+                });
         } else {
             Alert.alert("Error", "Enter a valid email.");
         }
     }
 
     return (
-        <View style={{marginTop: '10%'}}>
-            <View style={[sty.TextInputField, { marginTop: '0%' }]}>
+        <View style={{ marginTop: '10%' }}>
+            <View style={[sty.TextInputField, { marginTop: '0%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }]}>
+                <Icon
+                    name={'user'}
+                    type='simple-line-icon'
+                    size={18}
+                    style={{ marginHorizontal: '5%' }}
+                />
                 <TextInput
                     onChangeText={(text) => setEmail(text)}
                     value={email}
@@ -231,20 +242,32 @@ function SignInSection() {
                     placeholderTextColor={'#B3B3B6'}
                     style={{ marginHorizontal: '5%', color: 'black' }} />
             </View>
-            <View style={sty.TextInputField}>
+            <View style={[sty.TextInputField, { flexDirection: 'row', alignItems: 'center' }]}>
+                <Icon
+                    name={'lock'}
+                    type='simple-line-icon'
+                    size={18}
+                    style={{ marginHorizontal: '5%' }}
+                />
                 <TextInput
                     onChangeText={(text) => setPassword(text)}
-                    value={password}
-                    autoCapitalize="none"
                     placeholder='Password'
                     placeholderTextColor={'#B3B3B6'}
-                    secureTextEntry={true}
-                    style={{ marginHorizontal: '5%', color: 'black' }} />
+                    secureTextEntry={hidePass}
+                    style={{ flex: 1, marginHorizontal: '5%', color: 'black' }}
+                />
+                <Icon
+                    name={hidePass ? 'eye-slash' : 'eye'}
+                    type='font-awesome-5'
+                    size={18}
+                    onPress={() => setHidePass(!hidePass)}
+                    style={{ marginRight: '8%' }}
+                />
             </View>
             <TouchableOpacity activeOpacity={0.7} onPress={ForgotPassword} >
-            <Text style={{ marginTop: '5%', marginLeft: '10%', textDecorationLine: 'underline', fontSize: 12, fontWeight: '800', color: '#1B1A23' }}>
-                Forgot Password?
-            </Text>
+                <Text style={{ marginTop: '5%', marginLeft: '10%', textDecorationLine: 'underline', fontSize: 12, fontWeight: '800', color: '#1B1A23' }}>
+                    Forgot Password?
+                </Text>
             </TouchableOpacity>
             <Button
                 mode='contained'
