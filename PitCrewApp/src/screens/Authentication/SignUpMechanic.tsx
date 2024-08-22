@@ -130,7 +130,27 @@ function SignUpSection(p: any) {
     return (
         <View>
             <View style={{ marginTop: '6%' }}>
-                <View style={sty.TextInputField}>
+            <View style={[sty.TextInputField, { flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }]}>
+                    <Icon
+                        name={'home-repair-service'}
+                        type='materialicon'
+                        size={18}
+                        style={{ marginHorizontal: '5%' }}
+                    />
+                    <TextInput
+                        onChangeText={(text) => setWorkshopName(text)}
+                        placeholder='Workshop Name'
+                        placeholderTextColor={'#B3B3B6'}
+                        autoCapitalize='sentences'
+                        style={{ marginHorizontal: '5%', color: 'black' }} />
+                </View>
+                <View style={[sty.TextInputField, { flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }]}>
+                    <Icon
+                        name={'mail-outline'}
+                        type='ionicon'
+                        size={18}
+                        style={{ marginHorizontal: '5%' }}
+                    />
                     <TextInput
                         onChangeText={(text) => setEmail(text)}
                         placeholder='Email Address'
@@ -140,6 +160,12 @@ function SignUpSection(p: any) {
                         style={{ marginHorizontal: '5%', color: 'black' }} />
                 </View>
                 <View style={[sty.TextInputField, { flexDirection: 'row', alignItems: 'center' }]}>
+                    <Icon
+                        name={'lock'}
+                        type='simple-line-icon'
+                        size={18}
+                        style={{ marginHorizontal: '5%' }}
+                    />
                     <TextInput
                         onChangeText={(text) => setPassword(text)}
                         placeholder='Password'
@@ -152,10 +178,16 @@ function SignUpSection(p: any) {
                         type='font-awesome-5'
                         size={18}
                         onPress={() => setHidePass(!hidePass)}
-                        style={{ marginRight: '5%' }}
+                        style={{ marginRight: '8%' }}
                     />
                 </View>
                 <View style={[sty.TextInputField, { flexDirection: 'row', alignItems: 'center' }]}>
+                    <Icon
+                        name={'lock'}
+                        type='simple-line-icon'
+                        size={18}
+                        style={{ marginHorizontal: '5%' }}
+                    />
                     <TextInput
                         onChangeText={(text) => setConfirmPassword(text)}
                         placeholder='Confirm Password'
@@ -168,10 +200,16 @@ function SignUpSection(p: any) {
                         type='font-awesome-5'
                         size={18}
                         onPress={() => setHideConPass(!hideConPass)}
-                        style={{ marginRight: '5%' }}
+                        style={{ marginRight: '8%' }}
                     />
                 </View>
-                <View style={sty.TextInputField}>
+                <View style={[sty.TextInputField, { flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }]}>
+                    <Icon
+                        name={'contacts'}
+                        type='antdesign'
+                        size={18}
+                        style={{ marginHorizontal: '5%' }}
+                    />
                     <TextInput
                         keyboardType='numeric'
                         maxLength={10}
@@ -180,22 +218,26 @@ function SignUpSection(p: any) {
                         placeholderTextColor={'#B3B3B6'}
                         style={{ marginHorizontal: '5%', color: 'black' }} />
                 </View>
-                <View style={sty.TextInputField}>
+                <View style={[sty.TextInputField, { flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }]}>
+                    <Icon
+                        name={'idcard'}
+                        type='antdesign'
+                        size={18}
+                        style={{ marginHorizontal: '5%' }}
+                    />
                     <TextInput
                         onChangeText={(text) => setNic(text)}
                         placeholder='NIC'
                         placeholderTextColor={'#B3B3B6'}
                         style={{ marginHorizontal: '5%', color: 'black' }} />
                 </View>
-                <View style={sty.TextInputField}>
-                    <TextInput
-                        onChangeText={(text) => setWorkshopName(text)}
-                        placeholder='Workshop Name'
-                        placeholderTextColor={'#B3B3B6'}
-                        autoCapitalize='sentences'
-                        style={{ marginHorizontal: '5%', color: 'black' }} />
-                </View>
-                <View style={sty.TextInputField}>
+                <View style={[sty.TextInputField, { flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }]}>
+                    <Icon
+                        name={'user'}
+                        type='simple-line-icon'
+                        size={18}
+                        style={{ marginHorizontal: '5%' }}
+                    />
                     <TextInput
                         onChangeText={(text) => setOwnerName(text)}
                         placeholder="Owner's Name"
@@ -203,7 +245,13 @@ function SignUpSection(p: any) {
                         autoCapitalize='sentences'
                         style={{ marginHorizontal: '5%', color: 'black' }} />
                 </View>
-                <View style={sty.TextInputField}>
+                <View style={[sty.TextInputField, { flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }]}>
+                    <Icon
+                        name={'location-outline'}
+                        type='ionicon'
+                        size={18}
+                        style={{ marginHorizontal: '5%' }}
+                    />
                     <TextInput
                         multiline
                         onChangeText={(text) => setAddress(text)}
@@ -212,7 +260,13 @@ function SignUpSection(p: any) {
                         autoCapitalize='sentences'
                         style={{ marginHorizontal: '5%', color: 'black' }} />
                 </View>
-                <View style={sty.TextInputField}>
+                <View style={[sty.TextInputField, { flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }]}>
+                    <Icon
+                        name={'location-city'}
+                        type='materialicon'
+                        size={18}
+                        style={{ marginHorizontal: '5%' }}
+                    />
                     <TextInput
                         onChangeText={(text) => setWorkingCity(text)}
                         placeholder='Working City'
