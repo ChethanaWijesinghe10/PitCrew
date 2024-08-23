@@ -8,14 +8,14 @@ const WelcomeScreen = (props:any) => {
 
     const stack = props.navigation;
     
-    // useEffect(()=>{
-    //     AsyncStorage.getItem('email').then((t: any) =>{
-    //         console.log(t);
-    //         if(t){
-    //             stack.navigate('Home');
-    //         }
-    //     })
-    // },[])
+    useEffect(()=>{
+        AsyncStorage.getItem('email').then((t: any) =>{
+            console.log(t);
+            if(t){
+                stack.navigate('Home');
+            }
+        })
+    },[])
 
   return (
     <LinearGradient
