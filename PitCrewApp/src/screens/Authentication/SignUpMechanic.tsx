@@ -5,7 +5,7 @@ import { HeaderSignUp } from './SignUpUser'
 import { Button } from 'react-native-paper'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Dropdown } from 'react-native-element-dropdown'
-import firebase from 'firebase/compat/app'
+import { firebase } from '../../../firebase/firebaseConfig'
 import { useNavigation } from '@react-navigation/native'
 import { Icon } from '@rneui/base'
 
@@ -70,7 +70,7 @@ function SignUpSection(p: any) {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [contactNo, setContactNo] = useState('');
-    const [nic, setNic] = useState('');
+    const [description, setDescription] = useState('');
     const [workshopName, setWorkshopName] = useState('');
     const [ownerName, setOwnerName] = useState('');
     const [address, setAddress] = useState('');
@@ -86,9 +86,7 @@ function SignUpSection(p: any) {
             Alert.alert('Warning!', 'Passwords do not match.')
             return;
         }
-        if (email && password && confirmPassword && contactNo && nic && workshopName && ownerName && address && workingCity && specificArea) {
-
-
+        if (email && password && confirmPassword && contactNo && description && workshopName && ownerName && address && workingCity && specificArea) {
             try {
                 const response = await firebase.auth().createUserWithEmailAndPassword(email, password);
 
@@ -98,7 +96,7 @@ function SignUpSection(p: any) {
                         id: uid,
                         email,
                         contactNo,
-                        nic,
+                        description,
                         workshopName,
                         ownerName,
                         address,
@@ -130,7 +128,7 @@ function SignUpSection(p: any) {
     return (
         <View>
             <View style={{ marginTop: '6%' }}>
-            <View style={[sty.TextInputField, { flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }]}>
+                <View style={[sty.TextInputField, { flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }]}>
                     <Icon
                         name={'home-repair-service'}
                         type='materialicon'
@@ -220,19 +218,6 @@ function SignUpSection(p: any) {
                 </View>
                 <View style={[sty.TextInputField, { flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }]}>
                     <Icon
-                        name={'idcard'}
-                        type='antdesign'
-                        size={18}
-                        style={{ marginHorizontal: '5%' }}
-                    />
-                    <TextInput
-                        onChangeText={(text) => setNic(text)}
-                        placeholder='NIC'
-                        placeholderTextColor={'#B3B3B6'}
-                        style={{ marginHorizontal: '5%', color: 'black' }} />
-                </View>
-                <View style={[sty.TextInputField, { flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }]}>
-                    <Icon
                         name={'user'}
                         type='simple-line-icon'
                         size={18}
@@ -258,7 +243,15 @@ function SignUpSection(p: any) {
                         placeholder='Address'
                         placeholderTextColor={'#B3B3B6'}
                         autoCapitalize='sentences'
-                        style={{ marginHorizontal: '5%', color: 'black' }} />
+                        style={{
+                            color: 'black',
+                            paddingVertical: 20,
+                            marginHorizontal: '5%',  
+                            lineHeight: 20,     
+                            flex: 1,             
+                            textAlignVertical: 'center', 
+                        }}
+                    />
                 </View>
                 <View style={[sty.TextInputField, { flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }]}>
                     <Icon
@@ -276,7 +269,7 @@ function SignUpSection(p: any) {
                 </View>
                 <View style={[sty.TextInputField, { marginTop: '5%' }]}>
                     <Dropdown
-                        style={{ width: 310, height: 50, marginLeft: '5%', }}
+                        style={{ width: 310, height: 50, marginHorizontal: '5%', }}
                         selectedTextStyle={{ color: 'black' }}
                         placeholderStyle={{ color: '#B3B3B6' }}
                         itemTextStyle={{ color: 'black' }}
@@ -287,6 +280,30 @@ function SignUpSection(p: any) {
                         labelField={'label'}
                         valueField={'value'}
                     />
+                </View>
+                <View style={[sty.TextInputField, { flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }]}>
+                    <Icon
+                        name={'description'}
+                        type='materialicon'
+                        size={18}
+                        style={{ marginHorizontal: '5%' }}
+                    />
+                    <TextInput
+                        onChangeText={(text) => setDescription(text)}
+                        multiline={true}
+                        numberOfLines={4}
+                        placeholder='Description'
+                        placeholderTextColor={'#B3B3B6'}
+                        style={{
+                            color: 'black',
+                            paddingVertical: 10,
+                            marginHorizontal: '5%',
+                            lineHeight: 20,       
+                            flex: 1,              
+                            textAlignVertical: 'center',  
+                        }}
+                    />
+
                 </View>
             </View>
             <Button
