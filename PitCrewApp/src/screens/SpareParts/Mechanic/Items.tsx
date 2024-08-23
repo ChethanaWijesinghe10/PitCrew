@@ -145,7 +145,6 @@ const styles = StyleSheet.create({
     elevation: 4,
     marginTop: 10,
     borderRadius: 10,
-    height: 180,
     marginBottom: 10,
   },
   itemImage: {
@@ -161,6 +160,7 @@ const styles = StyleSheet.create({
   priceView: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginTop: 10
   },
   nameText: {
     fontSize: 18,
@@ -174,6 +174,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'red',
     fontWeight: '700',
+    paddingRight: 20
   },
   discountText: {
     fontSize: 17,
