@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, PermissionsAndroid, Image, TextInput, Dimensions, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, PermissionsAndroid, Image, TextInput, Dimensions, FlatList, TouchableOpacity, Linking } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import firestore from '@react-native-firebase/firestore';
 import { Icon } from '@rneui/base';
@@ -10,7 +10,7 @@ interface Item {
   data: {
     workshopName: string;
     description: string;
-    contactNo: number;
+    contactNo: string;
     specificArea: string;
     address: string;
     workingCity: string;
@@ -59,7 +59,7 @@ const RequestScreen = () => {
         });
       });
       setItems(tempData);
-      setLocationFilteredItems(tempData); 
+      setLocationFilteredItems(tempData);
     };
 
     fetchItems();
@@ -70,7 +70,7 @@ const RequestScreen = () => {
       const filteredByLocation = items.filter(item => {
         const itemData = item.data;
         return (village === '' || (itemData.village && itemData.village.toLowerCase() === village.toLowerCase())) ||
-               (district === '' || (itemData.district && itemData.district.toLowerCase() === district.toLowerCase()));
+          (district === '' || (itemData.district && itemData.district.toLowerCase() === district.toLowerCase()));
       });
 
       const filteredByText = filteredByLocation.filter(item => {
@@ -96,7 +96,7 @@ const RequestScreen = () => {
     const filteredItems = items.filter(item => {
       const itemData = item.data;
       return (village === '' || (itemData.village && itemData.village.toLowerCase() === village.toLowerCase())) ||
-             (district === '' || (itemData.district && itemData.district.toLowerCase() === district.toLowerCase()));
+        (district === '' || (itemData.district && itemData.district.toLowerCase() === district.toLowerCase()));
     });
     setLocationFilteredItems(filteredItems);
     setShowReset(true);
@@ -134,68 +134,77 @@ const RequestScreen = () => {
     try {
       const dataURL = `https://us1.locationiq.com/v1/reverse?key=pk.65885866a6c94616e70cc7c0f651fbc6&lat=${latitude}&lon=${longitude}&format=json&`;
       const dataResponse = await axios.get(dataURL);
-      const locationVillage = dataResponse.data.address.village; 
+      const locationVillage = dataResponse.data.address.village;
       const locationDistrict = dataResponse.data.address.state_district;
       setVillage(locationVillage);
       setDistrict(locationDistrict);
-      handleLocationFilter(); 
+      handleLocationFilter();
     } catch (error: any) {
       console.error('Error fetching location:', error.message);
     }
   };
 
+  const callNumber = (phone: string) => {
+    const url = `tel:${phone}`;
+    Linking.openURL(url).catch(err => console.error('An error occurred', err));
+  };
+
   return (
     <View style={styles.container}>
-      <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', gap: 10, alignItems: 'center' }} >
-        <Image source={require('../../assets/img/locationIcon.png')} style={styles.locationIcon} />
-        <View>
-          <TextInput
-            placeholder='Search'
-            style={styles.searchBar}
-            onChangeText={setSearchQuery}
-            value={searchQuery}
-          />
-        </View>
-        <Image source={require('../../assets/img/placeholder.jpg')} style={styles.userImage} />
-      </View>
-
-      <TouchableOpacity onPress={getLocation} activeOpacity={0.7} style={styles.location}>
-        <Icon name='location-sharp' type='ionicon' style={{ paddingRight: 5 }} />
-        <Text style={{ color: 'black' }}>Find by location</Text>
-      </TouchableOpacity>
-
-      {noResults && showReset && (
-        <TouchableOpacity onPress={resetFilters} activeOpacity={0.7} style={styles.resetButton}>
-          <Text style={styles.resetButtonText}>Reset Filters</Text>
-        </TouchableOpacity>
-      )}
-
-      <View style={styles.contentContainer}>
-        {noResults ? (
-          <Text style={styles.noResultsText}>No Results Found</Text>
-        ) : (
-          <FlatList
-            data={locationFilteredItems}
-            renderItem={({ item }) => (
-              <View style={styles.itemView}>
-                <Image source={require('../../assets/img/WorkShops/ws1.png')} style={styles.itemImage} />
-                <View style={styles.nameView}>
-                  <View style={styles.nameAreaContainer}>
-                    <Text style={styles.nameText}>{item.data.workshopName}</Text>
-                    <Text style={styles.areaText}>{' - ' + item.data.specificArea}</Text>
-                  </View>
-                  <Text style={styles.descText}>{item.data.description}</Text>
-                  <Text style={styles.descText}>{item.data.address}</Text>
-                  <Text style={styles.descText}>{'tel no: ' + item.data.contactNo}</Text>
-                </View>
+      <FlatList
+        ListHeaderComponent={
+          <>
+            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', gap: 10, alignItems: 'center' }}>
+              <Image source={require('../../assets/img/locationIcon.png')} style={styles.locationIcon} />
+              <View>
+                <TextInput
+                  placeholder='Search'
+                  style={styles.searchBar}
+                  onChangeText={setSearchQuery}
+                  value={searchQuery}
+                />
               </View>
+              <Image source={require('../../assets/img/placeholder.jpg')} style={styles.userImage} />
+            </View>
+  
+            <TouchableOpacity onPress={getLocation} activeOpacity={0.7} style={styles.location}>
+              <Icon name='location-sharp' type='ionicon' style={{ paddingRight: 5 }} />
+              <Text style={{ color: 'black' }}>Find by location</Text>
+            </TouchableOpacity>
+  
+            {noResults && showReset && (
+              <TouchableOpacity onPress={resetFilters} activeOpacity={0.7} style={styles.resetButton}>
+                <Text style={styles.resetButtonText}>Reset Filters</Text>
+              </TouchableOpacity>
             )}
-            keyExtractor={item => item.id}
-          />
+          </>
+        }
+        showsVerticalScrollIndicator={false}
+        data={locationFilteredItems}
+        renderItem={({ item }) => (
+          <View style={styles.itemView}>
+            <View style={styles.nameAreaContainer}>
+              <Text style={styles.nameText}>{item.data.workshopName}</Text>
+              <Text style={styles.areaText}>{item.data.specificArea}</Text>
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 10 }}>
+              <Image source={require('../../assets/img/WorkShops/ws1.png')} style={styles.itemImage} />
+              <View style={styles.nameView}>
+                <Text style={styles.descText}>{item.data.description}</Text>
+                <Text style={[styles.descText, { color: 'black' }]}>{item.data.address}</Text>
+                <TouchableOpacity onPress={() => callNumber(item.data.contactNo)}>
+                  <Text style={styles.telText}>{'tel no: ' + item.data.contactNo}</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
         )}
-      </View>
+        keyExtractor={item => item.id}
+        ListEmptyComponent={<Text style={styles.noResultsText}>No Results Found</Text>}
+      />
     </View>
   );
+  
 };
 
 const styles = StyleSheet.create({
@@ -231,13 +240,7 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 100
   },
-  contentContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   itemView: {
-    flexDirection: 'row',
     width: '95%',
     alignSelf: 'center',
     backgroundColor: '#e6e6e7',
@@ -259,7 +262,6 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   nameAreaContainer: {
-    flexDirection: 'row',
     alignItems: 'center',
   },
   nameText: {
@@ -276,6 +278,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     paddingTop: 8
+  },
+  telText: {
+    fontSize: 14,
+    fontWeight: '600',
+    paddingTop: 8,
+    color: '#4285F4', 
   },
   noResultsText: {
     fontSize: 18,

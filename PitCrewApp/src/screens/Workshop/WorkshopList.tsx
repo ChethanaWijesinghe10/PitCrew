@@ -35,6 +35,11 @@ const WorkshopList = () => {
     Linking.openURL(url).catch(err => console.error('An error occurred', err));
   };
 
+  const callNumber = (phone: string) => {
+    const url = `tel:${phone}`;
+    Linking.openURL(url).catch(err => console.error('An error occurred', err));
+  };
+
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
       <Image source={require('../../../assets/img/WorkShops/ws1.png')} style={styles.image} />
@@ -49,26 +54,32 @@ const WorkshopList = () => {
             <Icon name="map" size={30} color="#4285F4" />
           </TouchableOpacity>
         </View>
+        <TouchableOpacity onPress={() => callNumber(item.contactNo)}>
+          <Text style={styles.telText}>{'Tel No: ' + item.contactNo}</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
 
   return (
     <View style={styles.container}>
-      <View style={styles.categoriesContainer}>
-        <SegmentedPicker width={175} title={'All'} onPress={() => setSelectedCategory(null)} />
-        <SegmentedPicker width={175} title={'Auto Mechanic'} onPress={() => setSelectedCategory('Auto Mechanic')} />
-        <SegmentedPicker width={175} title={'A/C Technician'} onPress={() => setSelectedCategory('Air Conditioning Technician')} />
-        <SegmentedPicker width={175} title={'Auto Body'} onPress={() => setSelectedCategory('Auto Body')} />
-        <SegmentedPicker width={175} title={'Auto Electrician'} onPress={() => setSelectedCategory('Auto Electrician')} />
-        <SegmentedPicker width={175} title={'Heavy Vehicle Mechanic'} onPress={() => setSelectedCategory('Heavy Vehicle Mechanic')} />
-        <SegmentedPicker width={175} title={'Tire Mechanic'} onPress={() => setSelectedCategory('Tire Mechanic')} />
-        <SegmentedPicker width={175} title={'Car Wash'} onPress={() => setSelectedCategory('Car Wash')} />
-      </View>
       <FlatList
         data={workshops}
         renderItem={renderItem}
         keyExtractor={item => item.id}
+        ListHeaderComponent={(
+          <View style={styles.categoriesContainer}>
+            <SegmentedPicker width={175} title={'All'} onPress={() => setSelectedCategory(null)} />
+            <SegmentedPicker width={175} title={'Auto Mechanic'} onPress={() => setSelectedCategory('Auto Mechanic')} />
+            <SegmentedPicker width={175} title={'A/C Technician'} onPress={() => setSelectedCategory('Air Conditioning Technician')} />
+            <SegmentedPicker width={175} title={'Auto Body'} onPress={() => setSelectedCategory('Auto Body')} />
+            <SegmentedPicker width={175} title={'Auto Electrician'} onPress={() => setSelectedCategory('Auto Electrician')} />
+            <SegmentedPicker width={175} title={'Heavy Vehicle Mechanic'} onPress={() => setSelectedCategory('Heavy Vehicle Mechanic')} />
+            <SegmentedPicker width={175} title={'Tire Mechanic'} onPress={() => setSelectedCategory('Tire Mechanic')} />
+            <SegmentedPicker width={175} title={'Car Wash'} onPress={() => setSelectedCategory('Car Wash')} />
+          </View>
+        )}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );
@@ -147,7 +158,7 @@ const styles = StyleSheet.create({
   },
   address: {
     fontSize: 14,
-    color: '#888888',
+    color: 'black',
     marginBottom: 5,
   },
   iconsContainer: {
@@ -161,6 +172,11 @@ const styles = StyleSheet.create({
   },
   mapText: {
     paddingRight: 10,
+  },
+  telText: {
+    paddingRight: 10,
+    paddingTop: 10,
+    color: '#4285F4',  
   },
 });
 

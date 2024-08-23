@@ -32,7 +32,7 @@ const WorkshopProfile: React.FC = () => {
         if (user.exists) {
           const data = user.data();
           if (data) {
-            setWorkshopName(data.worshopName || '');
+            setWorkshopName(data.workshopName || '');
             setOwnerName(data.ownerName || '');
             setAddress(data.address || '');
             setWorkingCity(data.workingCity || '');

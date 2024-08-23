@@ -110,13 +110,13 @@ const ProductList: React.FC = () => {
               <Text style={styles.nameText}>{item.data.name}</Text>
               <Text style={styles.descText}>{item.data.description}</Text>
               <View style={styles.priceView}>
-                <Text style={styles.priceText}>{'Rs.' + item.data.discountPrice}</Text>
                 <Text style={styles.discountText}>{'Rs.' + item.data.price}</Text>
+                <Text style={styles.priceText}>{'Rs.' + item.data.discountPrice}</Text>
               </View>
+              <TouchableOpacity style={styles.addToCartBtn} onPress={() => onAddToCart(item)}>
+                <Text style={{ color: '#fff' }}>Add To Cart</Text>
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.addToCartBtn} onPress={() => onAddToCart(item)}>
-              <Text style={{ color: '#fff' }}>Add To Cart</Text>
-            </TouchableOpacity>
           </View>
         )}
         keyExtractor={item => item.id}
@@ -164,12 +164,13 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   nameView: {
-    width: '40%',
+    width: '65%',
     margin: 10,
   },
   priceView: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginTop: 5
   },
   nameText: {
     fontSize: 20,
@@ -190,12 +191,14 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: '600',
     textDecorationLine: 'line-through',
-    marginLeft: 20,
+    marginRight: 20,
   },
   addToCartBtn: {
     backgroundColor: '#291D7D',
     padding: 10,
     borderRadius: 10,
+    width: '45%',
+    marginTop: 10
   },
 });
 
