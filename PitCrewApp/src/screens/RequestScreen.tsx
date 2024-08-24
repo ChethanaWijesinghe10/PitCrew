@@ -136,6 +136,7 @@ const RequestScreen = () => {
       const dataResponse = await axios.get(dataURL);
       const locationVillage = dataResponse.data.address.village;
       const locationDistrict = dataResponse.data.address.state_district;
+      console.log(dataResponse.data.address)
       setVillage(locationVillage);
       setDistrict(locationDistrict);
       handleLocationFilter();
