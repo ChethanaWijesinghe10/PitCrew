@@ -85,11 +85,6 @@ const ProductList: React.FC = () => {
         count={cartCount}
         onClickIcon={() => navigation.navigate('Cart')}
       />
-      {/* <Appbar.Header style={{ backgroundColor: '#291D7D' }}>
-        <Appbar.Action icon={'menu'} color='#291D7D' />
-        <Appbar.Content title='Spare Parts' color='white' style={{ alignItems: 'center', }} />
-        <Appbar.Action icon={'cart'} color='white'  onPress={() => navigation.navigate('Cart')} />
-      </Appbar.Header> */}
 
       <View style={styles.searchContainer}>
         <Image source={require('../../../../assets/img/SpareParts/search.png')} style={styles.searchIcon} />
