@@ -28,10 +28,10 @@ const TabNavigation = () => {
                         <Text style={[styles.iconText, {color: focused? '#ED1C24' : '#707477'},]}>Parts</Text>
                     </View>
                 )}} />
-                <Tab.Screen name="Request" component={RequestScreen} options={{tabBarIcon: ({focused}) => (
+                <Tab.Screen name="Find" component={RequestScreen} options={{tabBarIcon: ({focused}) => (
                     <View style={styles.iconContainer} >
-                        <Icon name='plus-circle' type='material-community' size={35} color={focused? '#ED1C24' : '#707477'} />
-                        <Text style={[styles.iconText, {color: focused? '#ED1C24' : '#707477'},]}>Request</Text>
+                        <Icon name='find' type='antdesign' size={33} color={focused? '#ED1C24' : '#707477'} />
+                        <Text style={[styles.iconText, {color: focused? '#ED1C24' : '#707477'},]}>Find</Text>
                     </View>
                 )}} />
                 <Tab.Screen name="Workshops" component={WorkshopList} options={{tabBarIcon: ({focused}) => (
