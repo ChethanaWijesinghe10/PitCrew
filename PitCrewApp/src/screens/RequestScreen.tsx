@@ -45,6 +45,8 @@ const RequestScreen = () => {
   const [longitude, setLongitude] = useState<number>();
   const [village, setVillage] = useState<string>('');
   const [district, setDistrict] = useState<string>('');
+  const [town, setTown] = useState<string>('');
+  const [suburb, setSuburb] = useState<string>('');
   const [noResults, setNoResults] = useState<boolean>(false);
   const [showReset, setShowReset] = useState<boolean>(false);
 
@@ -66,47 +68,45 @@ const RequestScreen = () => {
   }, []);
 
   useEffect(() => {
-    const applyFilters = () => {
-      const filteredByLocation = items.filter(item => {
-        const itemData = item.data;
-        return (village === '' || (itemData.village && itemData.village.toLowerCase() === village.toLowerCase())) ||
-          (district === '' || (itemData.district && itemData.district.toLowerCase() === district.toLowerCase()));
-      });
-
-      const filteredByText = filteredByLocation.filter(item => {
-        const lowerSearchQuery = searchQuery.toLowerCase();
-        const itemData = item.data;
-        return (
-          (itemData.workshopName && itemData.workshopName.toLowerCase().includes(lowerSearchQuery)) ||
-          (itemData.description && itemData.description.toLowerCase().includes(lowerSearchQuery)) ||
-          (itemData.specificArea && itemData.specificArea.toLowerCase().includes(lowerSearchQuery)) ||
-          (itemData.address && itemData.address.toLowerCase().includes(lowerSearchQuery)) ||
-          (itemData.workingCity && itemData.workingCity.toLowerCase().includes(lowerSearchQuery))
-        );
-      });
-
-      setLocationFilteredItems(filteredByText);
-      setNoResults(filteredByText.length === 0);
-    };
-
     applyFilters();
-  }, [searchQuery, village, district, items]);
+  }, [searchQuery]);
 
-  const handleLocationFilter = () => {
-    const filteredItems = items.filter(item => {
+  useEffect(() => {
+    if (district || town || village || suburb) {
+      handleLocationFilter();
+    }
+  }, [district, town, village, suburb]);
+
+  const applyFilters = () => {
+    const filteredByLocation = items.filter(item => {
       const itemData = item.data;
       return (village === '' || (itemData.village && itemData.village.toLowerCase() === village.toLowerCase())) ||
         (district === '' || (itemData.district && itemData.district.toLowerCase() === district.toLowerCase()));
     });
-    setLocationFilteredItems(filteredItems);
+
+    const filteredByText = filteredByLocation.filter(item => {
+      const lowerSearchQuery = searchQuery.toLowerCase();
+      const itemData = item.data;
+      return (
+        (itemData.workshopName && itemData.workshopName.toLowerCase().includes(lowerSearchQuery)) ||
+        (itemData.description && itemData.description.toLowerCase().includes(lowerSearchQuery)) ||
+        (itemData.specificArea && itemData.specificArea.toLowerCase().includes(lowerSearchQuery)) ||
+        (itemData.address && itemData.address.toLowerCase().includes(lowerSearchQuery)) ||
+        (itemData.workingCity && itemData.workingCity.toLowerCase().includes(lowerSearchQuery))
+      );
+    });
+
+    setLocationFilteredItems(filteredByText);
     setShowReset(true);
-    setNoResults(filteredItems.length === 0);
+    setNoResults(filteredByText.length === 0);
   };
 
   const resetFilters = () => {
     setSearchQuery('');
     setVillage('');
     setDistrict('');
+    setTown('');
+    setSuburb('');
     setLocationFilteredItems(items);
     setShowReset(false);
     setNoResults(false);
@@ -134,17 +134,49 @@ const RequestScreen = () => {
     try {
       const dataURL = `https://us1.locationiq.com/v1/reverse?key=pk.65885866a6c94616e70cc7c0f651fbc6&lat=${latitude}&lon=${longitude}&format=json&`;
       const dataResponse = await axios.get(dataURL);
-      const locationVillage = dataResponse.data.address.village;
-      const locationDistrict = dataResponse.data.address.state_district;
-      console.log(dataResponse.data.address)
+  
+      // Extract the required fields and remove "District" from state_district
+      const locationVillage = dataResponse.data.address.village || '';
+      const locationDistrict = (dataResponse.data.address.state_district || '').replace(" District", "");
+      const locationTown = dataResponse.data.address.town || '';
+      const locationSuburb = dataResponse.data.address.suburb || '';
+  
+      console.log('Location Data:', {
+        locationVillage,
+        locationDistrict,
+        locationTown,
+        locationSuburb,
+      });
+  
       setVillage(locationVillage);
       setDistrict(locationDistrict);
-      handleLocationFilter();
+      setTown(locationTown);
+      setSuburb(locationSuburb);
     } catch (error: any) {
       console.error('Error fetching location:', error.message);
     }
   };
 
+  const handleLocationFilter = () => {
+    const filteredItems = items.filter((item, index) => {
+      const itemData = item.data;
+  
+      const lowerCaseWorkingCity = itemData.workingCity?.toLowerCase() || '';
+      const lowerCaseAddress = itemData.address?.toLowerCase() || '';
+  
+      const matchesStateDistrict = district && (lowerCaseWorkingCity.includes(district.toLowerCase()) || lowerCaseAddress.includes(district.toLowerCase()));
+      const matchesTown = town && (lowerCaseWorkingCity.includes(town.toLowerCase()) || lowerCaseAddress.includes(town.toLowerCase()));
+      const matchesVillage = village && (lowerCaseWorkingCity.includes(village.toLowerCase()) || lowerCaseAddress.includes(village.toLowerCase()));
+      const matchesSuburb = suburb && (lowerCaseWorkingCity.includes(suburb.toLowerCase()) || lowerCaseAddress.includes(suburb.toLowerCase()));
+      
+      return matchesStateDistrict || matchesTown || matchesVillage || matchesSuburb;
+    });
+  
+    setLocationFilteredItems(filteredItems);
+    setShowReset(true);
+    setNoResults(filteredItems.length === 0);
+  };
+  
   const callNumber = (phone: string) => {
     const url = `tel:${phone}`;
     Linking.openURL(url).catch(err => console.error('An error occurred', err));
@@ -167,13 +199,13 @@ const RequestScreen = () => {
               </View>
               <Image source={require('../../assets/img/placeholder.jpg')} style={styles.userImage} />
             </View>
-  
+
             <TouchableOpacity onPress={getLocation} activeOpacity={0.7} style={styles.location}>
               <Icon name='location-sharp' type='ionicon' style={{ paddingRight: 5 }} />
               <Text style={{ color: 'black' }}>Find by location</Text>
             </TouchableOpacity>
-  
-            {noResults && showReset && (
+
+            {showReset && (
               <TouchableOpacity onPress={resetFilters} activeOpacity={0.7} style={styles.resetButton}>
                 <Text style={styles.resetButtonText}>Reset Filters</Text>
               </TouchableOpacity>
@@ -205,7 +237,7 @@ const RequestScreen = () => {
       />
     </View>
   );
-  
+
 };
 
 const styles = StyleSheet.create({
@@ -284,7 +316,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     paddingTop: 8,
-    color: '#4285F4', 
+    color: '#4285F4',
   },
   noResultsText: {
     fontSize: 18,
@@ -305,6 +337,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   }
 });
-
 
 export default RequestScreen;

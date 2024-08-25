@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Alert } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
@@ -64,8 +64,19 @@ const Cart: React.FC<CartProps> = ({ navigation }) => {
   };
 
   const deleteItem = async (index: number) => {
-    const updatedCart = cartList.filter((_, i) => i !== index);
-    updateCart(updatedCart);
+    Alert.alert('Delete Confirmation', 'Are you sure you need to remove it from cart', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {
+        text: 'OK', onPress: () => {
+          const updatedCart = cartList.filter((_, i) => i !== index);
+          updateCart(updatedCart);
+        }
+      },
+    ]);
   };
 
   const updateCart = async (updatedCart: CartItem[]) => {
@@ -98,12 +109,6 @@ const Cart: React.FC<CartProps> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {/* <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.navigate('ProductList')}>
-          <Image source={require('../images/arrow.png')} style={styles.icon} />
-        </TouchableOpacity>
-        <Text style={styles.title}>Go Back</Text>
-      </View> */}
       <Appbar.Header style={{ backgroundColor: '#291D7D' }}>
         <Appbar.BackAction color='white' onPress={() => navigation.navigate('ProductList')} />
         <Appbar.Content title='Cart' color='white' style={{ alignItems: 'center', }} />
@@ -142,7 +147,7 @@ const Cart: React.FC<CartProps> = ({ navigation }) => {
       {cartList.length > 0 && (
         <View style={styles.checkoutView}>
           <Text style={styles.totalText}>
-            {'Items(' + getTotalItems() + ')\nTotal: $' + getTotal()}
+            {'Items(' + getTotalItems() + ')\nTotal: Rs.' + getTotal()}
           </Text>
           <TouchableOpacity
             style={styles.checkoutBtn}

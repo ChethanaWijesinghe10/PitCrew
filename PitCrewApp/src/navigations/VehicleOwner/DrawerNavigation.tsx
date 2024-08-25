@@ -38,7 +38,7 @@ const DrawerNavigation = (props: any) => {
         options={{ 
           headerTitle: 'Maintenance Records',
           headerTitleAlign:'center', 
-          headerTitleStyle: {fontSize: 23 }, 
+          headerTitleStyle: {fontSize: 20 }, 
           drawerItemStyle: {marginTop: 20}, 
           drawerIcon: ({color}) => {
           return <Icon name="gas-station" type='material-community' size={22} color={color} style={{marginLeft: 5}} />;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
 import { useIsFocused } from '@react-navigation/native';
@@ -30,7 +30,6 @@ const Checkout: React.FC<{ navigation: any }> = ({ navigation }) => {
     getAddressList();
   }, [isFocused]);
 
-  // Function to get cart items from Firestore
   const getCartItems = async () => {
     try {
       const userId = await AsyncStorage.getItem('USERID') ?? '';
@@ -44,7 +43,6 @@ const Checkout: React.FC<{ navigation: any }> = ({ navigation }) => {
     }
   };
 
-  // Function to get user's address list from Firestore
   const getAddressList = async () => {
     try {
       const userId = await AsyncStorage.getItem('USERID') ?? '';
@@ -62,7 +60,6 @@ const Checkout: React.FC<{ navigation: any }> = ({ navigation }) => {
     }
   };
 
-  // Function to calculate total price of items in cart
   const getTotal = () => {
     return cartList.reduce((total, item) => {
       const itemPrice = parseFloat(item.data.discountPrice.toString());
@@ -75,7 +72,6 @@ const Checkout: React.FC<{ navigation: any }> = ({ navigation }) => {
     }, 0);
   };
 
-  // Function to create payment intent
   const createPaymentIntent = async () => {
     try {
       const totalAmount = getTotal() * 100; // Convert to cents
@@ -93,7 +89,6 @@ const Checkout: React.FC<{ navigation: any }> = ({ navigation }) => {
     }
   };
 
-  // Function to handle payment process
   const handlePayment = async () => {
     try {
       const clientSecret = await createPaymentIntent();
@@ -121,111 +116,107 @@ const Checkout: React.FC<{ navigation: any }> = ({ navigation }) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <Appbar.Header style={{ backgroundColor: '#291D7D' }}>
-          <Appbar.BackAction color='white' onPress={() => navigation.navigate('ProductList')} />
-          <Appbar.Content title='Checkout' color='white' style={{ alignItems: 'center' }} />
-          <Appbar.Action icon={'cart'} color='#291D7D' />
-        </Appbar.Header>
+      <Appbar.Header style={{ backgroundColor: '#291D7D' }}>
+        <Appbar.BackAction color='white' onPress={() => navigation.navigate('ProductList')} />
+        <Appbar.Content title='Checkout' color='white' style={{ alignItems: 'center' }} />
+        <Appbar.Action icon={'cart'} color='#291D7D' />
+      </Appbar.Header>
 
-        <FlatList
-          style={{ flexGrow: 1 }}
-          data={cartList}
-          renderItem={({ item, index }) => {
-            const qty = item.qty !== undefined ? item.qty : 1;
-            return (
-              <View style={styles.itemView}>
-                <Image
-                  source={{ uri: item.data.imageUrl }}
-                  style={styles.itemImage}
-                />
-                <View style={styles.nameView}>
-                  <Text style={styles.nameText}>{item.data.name}</Text>
-                  <Text style={styles.descText}>{item.data.description}</Text>
-                  <View style={styles.priceView}>
-                    <Text style={styles.priceText}>
-                      {'$' + item.data.discountPrice}
-                    </Text>
-                    <Text style={styles.discountText}>
-                      {'$' + item.data.price}
-                    </Text>
-                  </View>
+      <FlatList
+        style={{ flexGrow: 1 }}
+        data={cartList}
+        renderItem={({ item, index }) => {
+          const qty = item.qty !== undefined ? item.qty : 1;
+          return (
+            <View style={styles.itemView}>
+              <Image
+                source={{ uri: item.data.imageUrl }}
+                style={styles.itemImage}
+              />
+              <View style={styles.nameView}>
+                <Text style={styles.nameText}>{item.data.name}</Text>
+                <Text style={styles.descText}>{item.data.description}</Text>
+                <View style={styles.priceView}>
+                  <Text style={styles.priceText}>
+                    {'Rs.' + item.data.discountPrice}
+                  </Text>
+                  <Text style={styles.discountText}>
+                    {'Rs.' + item.data.price}
+                  </Text>
                 </View>
-                <Text style={styles.nameText}>{'Qty : ' + qty}</Text>
               </View>
-            );
-          }}
-          keyExtractor={(item, index) => index.toString()}
-        />
-
-        <View style={styles.totalView}>
-          <Text style={styles.nameText}>Total</Text>
-          <Text style={styles.nameText}>{'$' + getTotal()}</Text>
-        </View>
-
-        <View style={styles.totalView}>
-          <Text style={styles.nameText}>Selected Address</Text>
-          <Text
-            style={styles.editAddress}
-            onPress={() => {
-              navigation.navigate('Address');
-            }}>
-            Change Address
-          </Text>
-        </View>
-
-        <Text
-          style={{
-            margin: 15,
-            width: '100%',
-            fontSize: 16,
-            color: '#000',
-            fontWeight: '600',
-          }}>
-          {selectedAddress}
-        </Text>
-
-      
-
-      <CardField
-        postalCodeEnabled={true}
-        placeholders={{
-          number: '4242 4242 4242 4242',
+              <Text style={styles.nameText}>{'Qty : ' + qty}</Text>
+            </View>
+          );
         }}
-        cardStyle={{
-          backgroundColor: '#FFFFFF',
-          textColor: '#000000',
-        }}
-        style={styles.cardField}
-        onCardChange={(cardDetails: any) => {
-          console.log('cardDetails', cardDetails);
-        }}
-        onFocus={(focusedField: any) => {
-          console.log('focusField', focusedField);
-        }}
+        keyExtractor={(item, index) => index.toString()}
+        ListFooterComponent={
+          <View>
+            <View style={styles.totalView}>
+              <Text style={styles.nameText}>Total</Text>
+              <Text style={styles.nameText}>{'Rs.' + getTotal()}</Text>
+            </View>
+
+            <View style={styles.totalView}>
+              <Text style={styles.nameText}>Selected Address</Text>
+              <Text
+                style={styles.editAddress}
+                onPress={() => {
+                  navigation.navigate('Address');
+                }}>
+                Change Address
+              </Text>
+            </View>
+
+            <Text
+              style={{
+                margin: 15,
+                width: '100%',
+                fontSize: 16,
+                color: '#000',
+                fontWeight: '600',
+              }}>
+              {selectedAddress}
+            </Text>
+            <CardField
+              postalCodeEnabled={true}
+              placeholders={{
+                number: '4242 4242 4242 4242',
+              }}
+              cardStyle={{
+                backgroundColor: '#FFFFFF',
+                textColor: '#000000',
+              }}
+              style={styles.cardField}
+              onCardChange={(cardDetails: any) => {
+                console.log('cardDetails', cardDetails);
+              }}
+              onFocus={(focusedField: any) => {
+                console.log('focusField', focusedField);
+              }}
+            />
+
+            <TouchableOpacity
+              disabled={selectedAddress === 'No Selected Address'}
+              style={[
+                styles.checkoutBtn,
+                {
+                  backgroundColor:
+                    selectedAddress === 'No Selected Address' ? '#DADADA' : 'green',
+                },
+              ]}
+              onPress={() => {
+                if (selectedAddress !== 'No Selected Address') {
+                  handlePayment();
+                }
+              }}>
+              <Text style={{ color: '#fff', fontSize: 18, fontWeight: '600' }}>
+                Pay Now {'Rs.' + getTotal()}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        }
       />
-
-      <View>
-        <TouchableOpacity
-          disabled={selectedAddress === 'No Selected Address'}
-          style={[
-            styles.checkoutBtn,
-            {
-              backgroundColor:
-                selectedAddress === 'No Selected Address' ? '#DADADA' : 'green',
-            },
-          ]}
-          onPress={() => {
-            if (selectedAddress !== 'No Selected Address') {
-              handlePayment();
-            }
-          }}>
-          <Text style={{ color: '#fff', fontSize: 18, fontWeight: '600' }}>
-            Pay Now {'$' + getTotal()}
-          </Text>
-        </TouchableOpacity>
-      </View>
-      </ScrollView>
     </View>
   );
 };
@@ -262,10 +253,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     backgroundColor: '#fff',
     elevation: 4,
-    marginTop: 10,
     borderRadius: 10,
-    height: 230,
-    marginBottom: 10,
+    marginVertical: 10,
     alignItems: 'center',
   },
   itemImage: {
@@ -285,6 +274,7 @@ const styles = StyleSheet.create({
   nameText: {
     fontSize: 16,
     fontWeight: 'bold',
+    marginRight: 10,
   },
   descText: {
     fontSize: 14,

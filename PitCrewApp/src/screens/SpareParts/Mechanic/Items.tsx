@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { useIsFocused, useNavigation, NavigationProp } from '@react-navigation/native';
 import firestore, { Filter, FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { Appbar } from 'react-native-paper';
@@ -62,24 +62,29 @@ const ItemList: React.FC = () => {
   };
 
   const deleteItem = (docId: string) => {
-    firestore()
-      .collection('items')
-      .doc(docId)
-      .delete()
-      .then(() => {
-        console.log('Item deleted!');
-        getItems();
-      });
+    Alert.alert('Delete Confirmation', 'Are you sure you need to remove this spare part', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {
+        text: 'OK', onPress: () => {
+          firestore()
+            .collection('items')
+            .doc(docId)
+            .delete()
+            .then(() => {
+              console.log('Item deleted!');
+              getItems();
+            });
+        }
+      },
+    ]);
   };
 
   return (
     <View>
-      {/* <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={require('../../../../assets/img/SpareParts/arrow.png')} style={styles.backIcon} />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Product List</Text>
-      </View> */}
       <Appbar.Header style={{ backgroundColor: '#291D7D' }}>
         <Appbar.BackAction color='white' onPress={() => navigation.navigate('MechanicFunctions')} />
         <Appbar.Content title='Product List' color='white' style={{ alignItems: 'center', }} />

@@ -22,21 +22,23 @@ const WorkshopListAdmin = () => {
 
   const deleteWorkshop = (id: string | undefined) => {
     Alert.alert('Delete Workshop', 'Are you sure you want to delete this workshop!', [
-        {
-          text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        {text: 'OK', onPress: () => {
-            firestore()
-      .collection('Mechanics')
-      .doc(id)
-      .delete()
-      .then(() => {
-        Alert.alert('Workshop deleted!', 'The workshop has been successfully deleted.');
-      });
-        }},
-      ]);
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {
+        text: 'OK', onPress: () => {
+          firestore()
+            .collection('Mechanics')
+            .doc(id)
+            .delete()
+            .then(() => {
+              Alert.alert('Workshop deleted!', 'The workshop has been successfully deleted.');
+            });
+        }
+      },
+    ]);
   };
 
   const openMap = (address: string | number | boolean) => {
@@ -53,7 +55,7 @@ const WorkshopListAdmin = () => {
         <Text style={styles.description}>{item.description}</Text>
         <Text style={styles.address}>{item.address}</Text>
         <View style={styles.iconsContainer}>
-          <TouchableOpacity onPress={() => deleteWorkshop(item.id)} style={{ flexDirection: 'row', flex: 1, alignContent: 'center', alignItems: 'center'}}>
+          <TouchableOpacity onPress={() => deleteWorkshop(item.id)} style={{ flexDirection: 'row', flex: 1, alignContent: 'center', alignItems: 'center' }}>
             <Icon name="delete" size={30} color="#ff0000" />
             <Text>Delete</Text>
           </TouchableOpacity>
@@ -95,7 +97,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   itemContainer: {
-    flexDirection: 'row' as 'row',  
+    flexDirection: 'row' as 'row',
     padding: 15,
     marginVertical: 8,
     backgroundColor: '#FFFFFF',
@@ -136,7 +138,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   iconsContainer: {
-    flexDirection: 'row' as 'row',  
+    flexDirection: 'row' as 'row',
     justifyContent: 'space-between',
     marginTop: 10,
   },
