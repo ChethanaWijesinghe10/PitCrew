@@ -7,7 +7,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { UserTypeProvider } from './src/components/UserTypeContext';
 import FlashMessage from 'react-native-flash-message';
 
-
 function App(): React.JSX.Element {
   return (
 

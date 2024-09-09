@@ -1,9 +1,10 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
+import { FIREBASE_API } from '@env';
 
 export const firebaseConfig = {
-  apiKey: "AIzaSyCNBbeSAjEotRaCHU8_XXTnZI4nmvvzoTo",
+  apiKey: FIREBASE_API,
   authDomain: "pitcrew-3e592.firebaseapp.com",
   databaseURL: 'https://console.firebase.google.com/u/0/project/pitcrew-3e592/firestore/databases/-default-/data/~2F',
   projectId: "pitcrew-3e592",

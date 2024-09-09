@@ -4,6 +4,7 @@ import Geolocation from 'react-native-geolocation-service';
 import firestore from '@react-native-firebase/firestore';
 import { Icon } from '@rneui/base';
 import axios from 'axios';
+import { GEOCODE_API } from '@env'
 
 interface Item {
   id: string;
@@ -132,7 +133,7 @@ const RequestScreen = () => {
 
   const reverseGeoCode = async (latitude: number, longitude: number) => {
     try {
-      const dataURL = `https://us1.locationiq.com/v1/reverse?key=pk.65885866a6c94616e70cc7c0f651fbc6&lat=${latitude}&lon=${longitude}&format=json&`;
+      const dataURL = `https://us1.locationiq.com/v1/reverse?key=${GEOCODE_API}&lat=${latitude}&lon=${longitude}&format=json&`;
       const dataResponse = await axios.get(dataURL);
   
       // Extract the required fields and remove "District" from state_district
