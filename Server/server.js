@@ -3,12 +3,14 @@ const Stripe = require('stripe');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const axios = require('axios');
+const dotenv = require('dotenv');
+dotenv.config();
 
 const app = express();
 const port = 3000;
 
 // Initialize Stripe
-const stripe = new Stripe('sk_test_51PJZWwG5nxL6dlBMu35hH7gSzFfaRdVZCkhGgjVucwsWusSxrPga9sCHYzUOTBr4GyP0PEviXrLrJV7I4hTFwjGF00ukDkVrm7', {
+const stripe = new Stripe( process.env.API_KEY , {
   apiVersion: '2022-11-15',
 });
 
@@ -39,4 +41,5 @@ app.post('/create-payment-intent', async (req, res) => {
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
+  console.log(process.env.API_KEY)
 });
